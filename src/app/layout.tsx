@@ -5,6 +5,7 @@ import { type Metadata } from "next";
 import { TRPCReactProvider } from "@/trpc/react";
 import NavigationBar from "./_components/NavigationBar";
 import { LandingPage } from "./_components/LandingPage";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "VSExam",
@@ -51,6 +52,7 @@ export default function RootLayout({
               <LandingPage />
             </div>
           </SignedOut>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
