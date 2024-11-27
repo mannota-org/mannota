@@ -14,10 +14,11 @@ export const LandingPage = () => {
                   <TypedComponent /> <br /> with Mannota
                 </h1>
                 <p className="mb-8 text-xl text-gray-600">
-                  Revolutionizing education through innovative assessment tools.
+                  Transforming healthcare with cutting-edge annotation tools.
                   <br />
-                  Empower your teaching, inspire learning, and unlock every
-                  student's potential in the digital era.
+                  Enhance diagnostics, streamline workflows, and empower
+                  healthcare professionals to unlock patient potential in the
+                  digital age.
                 </p>
               </section>
             </div>

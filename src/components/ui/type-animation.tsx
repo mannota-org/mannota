@@ -6,22 +6,22 @@ export const TypedComponent = () => {
   return (
     <TypeAnimation
       sequence={[
-        "Monitor students",
+        "Analyze medical texts",
         1500,
-        "Track Exam status",
+        "Annotate patient records",
         1500,
-        "View Exam details",
+        "Streamline clinical data",
         1500,
-        "Respond to help requests",
+        "Enhance diagnosis accuracy",
         1500,
-        "View exam submissions",
+        "Support healthcare decisions",
         1500,
       ]}
       wrapper="span"
       speed={40}
       style={{ display: "inline-block" }}
       repeat={Infinity}
-      className="relative z-20 mb-2 text-center text-5xl font-extrabold text-[#6466E9] sm:text-6xl lg:text-7xl"
+      className="relative z-20 mb-2 text-center text-5xl font-extrabold text-[#5AA676] sm:text-6xl lg:text-7xl"
     />
   );
 };

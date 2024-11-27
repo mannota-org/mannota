@@ -1,15 +1,18 @@
 import "@/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
-import { ClerkProvider, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "@/trpc/react";
 import NavigationBar from "./_components/NavigationBar";
 import { LandingPage } from "./_components/LandingPage";
 import { Toaster } from "@/components/ui/toaster";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/ui/app-sidebar";
 
 export const metadata: Metadata = {
-  title: "VSExam",
-  description: "VSExam is an exam management system for teachers.",
+  title: "Mannota",
+  description:
+    "Mannota is a Medical Text Annotation tool for experts and students",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
@@ -22,33 +25,23 @@ export default function RootLayout({
         <body className="h-full">
           <SignedIn>
             <TRPCReactProvider>
-              <UserButton />
-              {children}
-              {/* Commented out components that are not yet used */}
-              {/* <SidebarProvider> */}
-              {/*   <div className="flex h-screen w-full overflow-hidden"> */}
-              {/*     <AppSidebar /> */}
-              {/*     <div className="flex flex-1 flex-col overflow-hidden"> */}
-              {/*       <nav className="bg-gray-800 p-4 text-white"> */}
-              {/*         <div className="container mx-auto flex items-center justify-between"> */}
-              {/*           <div className="flex items-center"> */}
-              {/*             <SidebarTrigger /> */}
-              {/*             <span className="ml-4 text-xl font-bold">VsExam</span> */}
-              {/*           </div> */}
-              {/*         </div> */}
-              {/*       </nav> */}
-              {/*       <main className="flex-1 overflow-auto bg-gray-100 p-4"> */}
-              {/*         <div className="mx-auto w-full max-w-7xl">{children}</div> */}
-              {/*       </main> */}
-              {/*     </div> */}
-              {/*   </div> */}
-              {/*   <Toaster /> */}
-              {/* </SidebarProvider> */}
+              <SidebarProvider>
+                <div className="flex h-screen w-full overflow-hidden">
+                  <AppSidebar />
+                  <div className="flex flex-1 flex-col overflow-hidden">
+                    <NavigationBar isSignedIn={true} />
+                    <main className="flex-1 overflow-auto bg-gray-100 p-4">
+                      <div className="mx-auto w-full max-w-7xl">{children}</div>
+                    </main>
+                  </div>
+                </div>
+              </SidebarProvider>
+              <Toaster />
             </TRPCReactProvider>
           </SignedIn>
           <SignedOut>
             <div className="flex h-screen w-full flex-col">
-              <NavigationBar />
+              <NavigationBar isSignedIn={false} />
               <LandingPage />
             </div>
           </SignedOut>

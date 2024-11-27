@@ -39,7 +39,6 @@ model User {
 
 model Settings {
   id                  String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId              String   @db.ObjectId
   confidenceThreshold Float    @default(0.5)
   dataPerBatch        Int      @default(100)
   createdAt           DateTime @default(now())

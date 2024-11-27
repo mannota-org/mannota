@@ -49,3 +49,5 @@ export const userRouter = createTRPCRouter({
       return newUser;
     }),
 });
+
+export default userRouter;
