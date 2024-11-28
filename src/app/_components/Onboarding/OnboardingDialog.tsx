@@ -9,7 +9,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { RoleCombobox } from "@/app/_components/Onboarding/Combobox";
 import { api } from "@/trpc/react";
@@ -18,26 +17,25 @@ import { useToast } from "@/hooks/use-toast";
 
 export const OnboardingDialog = () => {
   const [role, setRole] = useState<string>("");
-  const [isOpen, setIsOpen] = useState<boolean>(false); // Start with dialog closed
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const { user } = useUser();
-  const email = user?.primaryEmailAddress?.emailAddress || "";
-  const fullName = user?.fullName || "";
+  // Replace '||' with '??' to account for possible null/undefined values
+  const email = user?.primaryEmailAddress?.emailAddress ?? "";
+  const fullName = user?.fullName ?? "";
   const { toast } = useToast();
 
-  // Check if the user exists
   const { data: userExists, isSuccess } = api.user.checkUserExists.useQuery(
     { email },
     {
-      enabled: !!email, // Only run the query if there is an email
+      enabled: !!email,
     },
   );
 
-  // Use effect to handle the query success
   useEffect(() => {
     if (isSuccess) {
       if (!userExists) {
-        setIsOpen(true); // Open dialog if user does not exist
+        setIsOpen(true);
       } else {
         console.log("User already exists, not displaying dialog.");
       }
@@ -55,7 +53,8 @@ export const OnboardingDialog = () => {
         console.log("User created:", data);
       }
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
+      // Change 'any' to 'unknown' to better type the error
       toast({
         title: "Error",
         variant: "destructive",
@@ -82,12 +81,8 @@ export const OnboardingDialog = () => {
     }
   };
 
-  // Only render the dialog if isOpen is true
   return isOpen ? (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      {/* <DialogTrigger asChild>
-        <Button variant="outline">Complete Onboarding</Button>
-      </DialogTrigger> */}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Welcome!</DialogTitle>

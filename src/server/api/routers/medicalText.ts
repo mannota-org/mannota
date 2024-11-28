@@ -19,9 +19,9 @@ export const medicalTextRouter = createTRPCRouter({
       const medicalText = await db.medicalTextData.create({
         data: {
           ...input,
-          annotateReason: input.annotateReason || null,
-          userId: input.userId || null,
-          batchId: input.batchId || null,
+          annotateReason: input.annotateReason ?? null,
+          userId: input.userId ?? null,
+          batchId: input.batchId ?? null,
         },
       });
       return medicalText;

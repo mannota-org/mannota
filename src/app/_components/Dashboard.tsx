@@ -26,7 +26,7 @@ const AnnotationDashboard: React.FC = () => {
 
   const { user } = useUser();
   const { toast } = useToast();
-  const email = user?.primaryEmailAddress?.emailAddress || "";
+  const email = user?.primaryEmailAddress?.emailAddress ?? "";
 
   const {
     data,
@@ -38,7 +38,7 @@ const AnnotationDashboard: React.FC = () => {
   const updateMedicalTextMutation =
     api.medicalText.updateMedicalText.useMutation({
       onSuccess: () => {
-        refetchMedicalText();
+        void refetchMedicalText();
       },
     });
 
@@ -66,11 +66,11 @@ const AnnotationDashboard: React.FC = () => {
         description: "Failed to fetch user data.",
       });
     }
-  }, [userError]);
+  }, [userError, toast]);
 
   useEffect(() => {
     if (data?.medicalText && data.medicalText.length > 0) {
-      setEditableText(data?.medicalText?.[0]?.originalText || "");
+      setEditableText(data?.medicalText[0]?.originalText ?? "");
       setSeconds(0);
       setIsRunning(false);
       setIsPaused(false);
@@ -116,13 +116,13 @@ const AnnotationDashboard: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (!data || !data.medicalText?.length || !userData) return;
+    if (!data?.medicalText?.length || !userData) return;
 
     setIsSubmitting(true);
 
     try {
       await updateMedicalTextMutation.mutateAsync({
-        id: data.medicalText?.[0]?.id || "",
+        id: data.medicalText[0]?.id ?? "",
         annotatedText: editableText,
         confidence: 1,
         annotateReason,
@@ -178,7 +178,7 @@ const AnnotationDashboard: React.FC = () => {
   const handleFetchNextBatch = async () => {
     try {
       await refetchMedicalText();
-      if (!data?.medicalText.length) {
+      if (!data?.medicalText?.length) {
         toast({
           title: "Annotation Completed",
           description: "All batches have been completed.",
@@ -223,7 +223,7 @@ const AnnotationDashboard: React.FC = () => {
               <div className="grid w-full items-center gap-1.5">
                 <Label>Sample Text</Label>
                 <Textarea
-                  value={medicalText?.[0]?.originalText || "N/A"}
+                  value={medicalText?.[0]?.originalText ?? "N/A"}
                   readOnly
                   className="resize-none bg-gray-100 text-gray-700"
                   disabled
@@ -236,24 +236,24 @@ const AnnotationDashboard: React.FC = () => {
                       variant="outline"
                       className="bg-primary-100 text-primary-800 border-primary-300 text-base"
                     >
-                      {medicalText?.[0]?.task || "N/A"}
+                      {medicalText?.[0]?.task ?? "N/A"}
                     </Badge>
                     <Badge
                       variant="outline"
                       className="bg-secondary-100 text-secondary-800 border-secondary-300 text-base"
                     >
                       Confidence:{" "}
-                      {medicalText?.[0]?.confidence?.toFixed(1) || "N/A"}
+                      {medicalText?.[0]?.confidence?.toFixed(1) ?? "N/A"}
                     </Badge>
                     <Badge
                       variant="outline"
                       className="bg-secondary-100 text-secondary-800 border-secondary-300 text-base"
                     >
-                      Batch {batch?.index || "N/A"}
+                      Batch {batch?.index ?? "N/A"}
                     </Badge>
                   </div>
                   <div>
-                    {textLeftToAnnotate || "N/A"} / {totalTextInBatch || "N/A"}{" "}
+                    {textLeftToAnnotate ?? "N/A"} / {totalTextInBatch ?? "N/A"}{" "}
                     text(s) left to annotate.
                   </div>
                 </>
@@ -301,7 +301,7 @@ const AnnotationDashboard: React.FC = () => {
                     <Button
                       onClick={() => {
                         stopTimer();
-                        handleSubmit();
+                        void handleSubmit();
                       }}
                       disabled={!isRunning || isSubmitting}
                     >

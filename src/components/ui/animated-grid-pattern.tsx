@@ -10,7 +10,7 @@ interface AnimatedGridPatternProps {
   height?: number;
   x?: number;
   y?: number;
-  strokeDasharray?: any;
+  strokeDasharray?: string | number;
   numSquares?: number;
   className?: string;
   maxOpacity?: number;
@@ -23,7 +23,7 @@ export default function AnimatedGridPattern({
   height = 40,
   x = -1,
   y = -1,
-  strokeDasharray = 0,
+  strokeDasharray = "0",
   numSquares = 50,
   className,
   maxOpacity = 0.5,
@@ -75,7 +75,8 @@ export default function AnimatedGridPattern({
   // Resize observer to update container dimensions
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
+      for (const entry of entries) {
+        // Change 'let' to 'const'
         setDimensions({
           width: entry.contentRect.width,
           height: entry.contentRect.height,
@@ -93,6 +94,11 @@ export default function AnimatedGridPattern({
       }
     };
   }, [containerRef]);
+
+    const dashArray =
+      typeof strokeDasharray === "string"
+        ? strokeDasharray
+        : strokeDasharray.toString();
 
   return (
     <svg
@@ -116,13 +122,13 @@ export default function AnimatedGridPattern({
           <path
             d={`M.5 ${height}V.5H${width}`}
             fill="none"
-            strokeDasharray={strokeDasharray}
+            strokeDasharray={dashArray}
           />
         </pattern>
       </defs>
       <rect width="100%" height="100%" fill={`url(#${id})`} />
       <svg x={x} y={y} className="overflow-visible">
-        {squares.map(({ pos: [x, y], id }, index) => (
+        {squares.map(({ pos: [x = 0, y = 0], id }, index) => (
           <motion.rect
             initial={{ opacity: 0 }}
             animate={{ opacity: maxOpacity }}
