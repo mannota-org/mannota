@@ -7,12 +7,7 @@ export const userRouter = createTRPCRouter({
     .input(z.object({ email: z.string().email() }))
     .query(async ({ input }) => {
       const { email } = input;
-
-      // Check if a user with the given email already exists
-      const existingUser = await db.user.findUnique({
-        where: { email },
-      });
-
+      const existingUser = await db.user.findUnique({ where: { email } });
       return existingUser ? true : false;
     }),
 
@@ -26,27 +21,23 @@ export const userRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const { email, fullName, role } = input;
-
-      // Check if a user with the given email already exists
-      const existingUser = await db.user.findUnique({
-        where: { email },
-      });
-
-      if (existingUser) {
-        return null; // User already exists
-      }
-
-      // Create a new user if not found
+      const existingUser = await db.user.findUnique({ where: { email } });
+      if (existingUser) return null; // User already exists
       const newUser = await db.user.create({
-        data: {
-          email,
-          name: fullName,
-          role,
-          medicalTexts: { create: [] }, // empty array for MedicalTextData[]
-        },
+        data: { email, name: fullName, role, medicalTexts: { create: [] } },
       });
-
       return newUser;
+    }),
+
+  getUserByEmail: publicProcedure
+    .input(z.object({ email: z.string().email() }))
+    .query(async ({ input }) => {
+      const { email } = input;
+      const user = await db.user.findUnique({
+        where: { email },
+        select: { id: true, email: true, name: true, role: true },
+      });
+      return user;
     }),
 });
 

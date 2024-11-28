@@ -12,9 +12,35 @@ export interface MedicalTextData {
   annotatedText: string;
   task: string;
   confidence: number;
-  batchNumber: number;
-  batchPerformance: number;
+  annotateReason?: string;
+  annotateTime: number;
+  userId?: string;
+  batchId?: string;
 }
+
+export type MedicalTextDataInput = {
+  originalText: string;
+  task: string;
+  confidence: number;
+  annotateReason?: string;
+  annotateTime: number;
+  userId?: string;
+  batchId?: string;
+};
+
+export interface Batch {
+  id: string;
+  index: number;
+  confidence: number;
+  performance: number;
+  medicalTexts: MedicalTextData[];
+}
+
+export type BatchInput = {
+  index: number;
+  confidence: number;
+  performance: number;
+};
 
 export type UserCreationInput = {
   email: string;

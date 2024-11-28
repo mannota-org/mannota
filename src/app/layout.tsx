@@ -1,5 +1,4 @@
 import "@/styles/globals.css";
-import { GeistSans } from "geist/font/sans";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "@/trpc/react";
@@ -7,7 +6,13 @@ import NavigationBar from "./_components/NavigationBar";
 import { LandingPage } from "./_components/LandingPage";
 import { Toaster } from "@/components/ui/toaster";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/ui/app-sidebar";
+import { AppSidebar } from "@/app/_components/AppSidebar";
+
+// Import Inter font from Google Fonts
+import { Inter } from "next/font/google";
+
+// Initialize Inter font
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Mannota",
@@ -21,7 +26,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${GeistSans.variable} h-full`}>
+      <html lang="en" className={`${inter.className} h-full`}>
+        {" "}
+        {/* Apply Inter */}
         <body className="h-full">
           <SignedIn>
             <TRPCReactProvider>

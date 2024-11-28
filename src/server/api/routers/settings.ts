@@ -3,6 +3,11 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
 
 export const settingsRouter = createTRPCRouter({
+  getSettings: publicProcedure.query(async () => {
+    const settings = await db.settings.findFirst();
+    return settings;
+  }),
+
   updateSettings: publicProcedure
     .input(
       z.object({
@@ -14,7 +19,6 @@ export const settingsRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const { id, confidenceThreshold, dataPerBatch } = input;
 
-      // Update settings in the database
       const updatedSettings = await db.settings.update({
         where: { id },
         data: {
