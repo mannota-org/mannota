@@ -3,37 +3,17 @@
 import { useState } from "react";
 import { api } from "@/trpc/react";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 export default function AddText() {
-  const [formData, setFormData] = useState({
-    originalText: "",
-    task: "",
-    confidence: 0,
-    annotateReason: "",
-    annotateTime: 0,
-    userId: "",
-    batchId: "",
-  });
-
-  const [batchData, setBatchData] = useState({
-    index: 0,
-    confidence: 0,
-    performance: 0,
-  });
+  const [medicalTextInput, setMedicalTextInput] = useState("");
+  const [batchInput, setBatchInput] = useState("");
 
   const { toast } = useToast();
 
   const addMedicalTextMutation = api.medicalText.addMedicalText.useMutation({
     onSuccess: (data) => {
-      setFormData({
-        originalText: "",
-        task: "",
-        confidence: 0,
-        annotateReason: "",
-        annotateTime: 0,
-        userId: "",
-        batchId: "",
-      });
+      setMedicalTextInput(""); // Clear input after success
       toast({
         title: "Success",
         description: "Medical text added successfully.",
@@ -52,11 +32,7 @@ export default function AddText() {
 
   const addBatchMutation = api.batch.addBatch.useMutation({
     onSuccess: (data) => {
-      setBatchData({
-        index: 0,
-        confidence: 0,
-        performance: 0,
-      });
+      setBatchInput(""); // Clear input after success
       toast({
         title: "Success",
         description: "Batch added successfully.",
@@ -73,135 +49,97 @@ export default function AddText() {
     },
   });
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleBatchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setBatchData((prev) => ({
-      ...prev,
-      [name]: parseFloat(value), // Ensure number type
-    }));
-  };
-
-  const handleTextSubmit = async (e: React.FormEvent) => {
+  const handleMedicalTextSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await addMedicalTextMutation.mutateAsync({
-        ...formData,
-        confidence: parseFloat(formData.confidence.toString()), // Ensure number type
-        annotateTime: parseInt(formData.annotateTime.toString(), 10), // Ensure number type
-      });
+      const formData = JSON.parse(medicalTextInput);
+      await addMedicalTextMutation.mutateAsync(formData);
     } catch (error) {
-      console.error("Mutation execution error:", error);
+      toast({
+        title: "Error",
+        variant: "destructive",
+        description: "Invalid JSON format for medical text.",
+      });
+      console.error("JSON parse error:", error);
     }
   };
 
   const handleBatchSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await addBatchMutation.mutateAsync(batchData);
+      const formData = JSON.parse(batchInput);
+      await addBatchMutation.mutateAsync(formData);
     } catch (error) {
-      console.error("Mutation execution error:", error);
+      toast({
+        title: "Error",
+        variant: "destructive",
+        description: "Invalid JSON format for batch.",
+      });
+      console.error("JSON parse error:", error);
     }
   };
 
   return (
-    <div>
-      <h1>Add Medical Text</h1>
-      <form onSubmit={handleTextSubmit}>
-        <input
-          type="text"
-          name="originalText"
-          value={formData.originalText}
-          onChange={handleTextChange}
-          placeholder="Original Text"
-          required
+    <div className="mt-24">
+      <h1 className="font-bold">Add Medical Text</h1>
+      <div className="flex gap-2">
+        <textarea
+          value={JSON.stringify(
+            {
+              originalText: "Sample medical text",
+              task: "Simplify OR Summarize OR Translate",
+              confidence: 0.9,
+              annotateReason: "Sample reason",
+              annotateTime: 120,
+              userId:
+                "6747497d616992da7c23bbe7 OR 6743e69ef8b056be93eaf750 OR 6743e331f8b056be93eaf74e OR 6743e1edf8b056be93eaf74d",
+              batchId:
+                "6746de9a334cf53948e7f9b5 OR 6746dea2334cf53948e7f9b6 OR 6746deaf334cf53948e7f9b7",
+            },
+            null,
+            2,
+          )}
+          readOnly
+          style={{ width: "45%", height: "375px" }}
+          placeholder="Example JSON"
         />
-        <input
-          type="text"
-          name="task"
-          value={formData.task}
-          onChange={handleTextChange}
-          placeholder="Task"
-          required
-        />
-        <input
-          type="number"
-          name="confidence"
-          value={formData.confidence}
-          onChange={handleTextChange}
-          step="0.01"
-          placeholder="Confidence"
-          required
-        />
-        <input
-          type="text"
-          name="annotateReason"
-          value={formData.annotateReason}
-          onChange={handleTextChange}
-          placeholder="Annotate Reason"
-        />
-        <input
-          type="number"
-          name="annotateTime"
-          value={formData.annotateTime}
-          onChange={handleTextChange}
-          placeholder="Annotate Time"
-          required
-        />
-        <input
-          type="text"
-          name="userId"
-          value={formData.userId}
-          onChange={handleTextChange}
-          placeholder="User ID"
-        />
-        <input
-          type="text"
-          name="batchId"
-          value={formData.batchId}
-          onChange={handleTextChange}
-          placeholder="Batch ID"
-        />
-        <button type="submit">Add Text</button>
-      </form>
+        <form onSubmit={handleMedicalTextSubmit} style={{ width: "45%" }}>
+          <textarea
+            value={medicalTextInput}
+            onChange={(e) => setMedicalTextInput(e.target.value)}
+            style={{ width: "100%", height: "375px" }}
+            placeholder='{"originalText": "...", "task": "...", "confidence": 0, "annotateReason": "...", "annotateTime": 0, "userId": "...", "batchId": "..."}'
+          />
+          <Button type="submit">Add Medical Text</Button>
+        </form>
+      </div>
 
-      <h1>Add Batch</h1>
-      <form onSubmit={handleBatchSubmit}>
-        <input
-          type="number"
-          name="index"
-          value={batchData.index}
-          onChange={handleBatchChange}
-          placeholder="Index"
-          required
+      <h1 className="mt-8 font-bold">Add Batch</h1>
+      <div style={{ display: "flex", gap: "1rem" }}>
+        <textarea
+          value={JSON.stringify(
+            {
+              index: 1,
+              confidence: 0.75,
+              performance: 85.5,
+            },
+            null,
+            2,
+          )}
+          readOnly
+          style={{ width: "45%", height: "150px" }}
+          placeholder="Example JSON"
         />
-        <input
-          type="number"
-          name="confidence"
-          value={batchData.confidence}
-          onChange={handleBatchChange}
-          step="0.01"
-          placeholder="Confidence"
-          required
-        />
-        <input
-          type="number"
-          name="performance"
-          value={batchData.performance}
-          onChange={handleBatchChange}
-          step="0.01"
-          placeholder="Performance"
-          required
-        />
-        <button type="submit">Add Batch</button>
-      </form>
+        <form onSubmit={handleBatchSubmit} style={{ width: "45%" }}>
+          <textarea
+            value={batchInput}
+            onChange={(e) => setBatchInput(e.target.value)}
+            style={{ width: "100%", height: "150px" }}
+            placeholder='{"index": 0, "confidence": 0, "performance": 0}'
+          />
+          <Button type="submit">Add Batch</Button>
+        </form>
+      </div>
     </div>
   );
 }
