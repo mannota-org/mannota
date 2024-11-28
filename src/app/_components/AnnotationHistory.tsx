@@ -1,18 +1,14 @@
 "use client";
 
-import React from "react";
-import { SignedIn } from "@clerk/nextjs";
 import { api } from "@/trpc/react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -21,14 +17,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { Label } from "@radix-ui/react-label";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import * as React from "react";
 
-const History = () => {
+const AnnotationHistory: React.FC = () => {
   const { data: history, isLoading } =
     api.medicalText.fetchAnnotationHistory.useQuery();
+
+  React.useEffect(() => {
+    if (history === undefined || history.length === 0) {
+      console.warn("No annotation history data available");
+    }
+  }, [history]);
 
   if (isLoading) {
     return (
@@ -39,15 +40,15 @@ const History = () => {
   }
 
   return (
-    <SignedIn>
-      <div className="">
-        <div className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative flex h-[10rem] w-full items-center justify-center bg-white dark:bg-black">
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
-          <h2 className="primary relative z-20 mt-12 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text text-center text-5xl font-bold text-transparent">
-            Annotation Dashboard
-          </h2>
-        </div>
+    <div className="h-full w-full overflow-hidden">
+      <div className="relative h-full w-full items-center justify-center bg-white bg-dot-black/[0.4] dark:bg-black dark:bg-dot-white/[0.4]">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_10%,black)] dark:bg-black"></div>
+        <h2 className="primary relative z-20 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text pb-12 pt-24 text-center text-5xl font-bold text-transparent">
+          Annotation History
+        </h2>
+      </div>
 
+      <div className="px-8 py-4">
         <Table>
           <TableHeader>
             <TableRow>
@@ -148,8 +149,8 @@ const History = () => {
           </TableBody>
         </Table>
       </div>
-    </SignedIn>
+    </div>
   );
 };
 
-export default History;
+export default AnnotationHistory;

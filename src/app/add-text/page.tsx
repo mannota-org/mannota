@@ -5,9 +5,11 @@ import { api } from "@/trpc/react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 
-export default function AddText() {
-  const [medicalTextInput, setMedicalTextInput] = useState("");
-  const [batchInput, setBatchInput] = useState("");
+import type { MedicalTextDataInput, BatchInput } from "../types/types";
+
+const AddText = () => {
+  const [medicalTextInput, setMedicalTextInput] = useState<string>("");
+  const [batchInput, setBatchInput] = useState<string>("");
 
   const { toast } = useToast();
 
@@ -52,7 +54,7 @@ export default function AddText() {
   const handleMedicalTextSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const formData = JSON.parse(medicalTextInput);
+      const formData = JSON.parse(medicalTextInput) as MedicalTextDataInput;
       await addMedicalTextMutation.mutateAsync(formData);
     } catch (error) {
       toast({
@@ -67,7 +69,7 @@ export default function AddText() {
   const handleBatchSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const formData = JSON.parse(batchInput);
+      const formData = JSON.parse(batchInput) as BatchInput;
       await addBatchMutation.mutateAsync(formData);
     } catch (error) {
       toast({
@@ -142,4 +144,6 @@ export default function AddText() {
       </div>
     </div>
   );
-}
+};
+
+export default AddText;

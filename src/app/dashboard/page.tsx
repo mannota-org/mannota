@@ -1,4 +1,4 @@
-import AnnotationDashboard from "../_components/Dashboard";
+import AnnotationDashboard from "../_components/AnnotationDashboard";
 import { SignedIn } from "@clerk/nextjs";
 
 const Dashboard = () => {

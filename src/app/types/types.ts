@@ -18,6 +18,20 @@ export interface MedicalTextData {
   batchId?: string;
 }
 
+export interface Batch {
+  id: string;
+  index: number;
+  confidence: number;
+  performance: number;
+  medicalTexts: MedicalTextData[];
+}
+
+export type UserCreationInput = {
+  email: string;
+  fullName: string;
+  role: string;
+};
+
 export type MedicalTextDataInput = {
   originalText: string;
   task: string;
@@ -28,22 +42,8 @@ export type MedicalTextDataInput = {
   batchId?: string;
 };
 
-export interface Batch {
-  id: string;
-  index: number;
-  confidence: number;
-  performance: number;
-  medicalTexts: MedicalTextData[];
-}
-
 export type BatchInput = {
   index: number;
   confidence: number;
   performance: number;
-};
-
-export type UserCreationInput = {
-  email: string;
-  fullName: string;
-  role: string;
 };

@@ -209,15 +209,16 @@ const AnnotationDashboard: React.FC = () => {
   const { medicalText, batch, textLeftToAnnotate, totalTextInBatch } = data;
 
   return (
-    <div>
-      <div className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative flex h-[10rem] w-full items-center justify-center bg-white dark:bg-black">
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
-        <h2 className="primary relative z-20 mt-12 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text py-8 text-center text-5xl font-bold text-transparent">
+    <div className="h-full w-full overflow-hidden">
+      <div className="relative h-full w-full items-center justify-center bg-white bg-dot-black/[0.4] dark:bg-black dark:bg-dot-white/[0.4]">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_10%,black)] dark:bg-black"></div>
+        <h2 className="primary relative z-20 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text pb-12 pt-24 text-center text-5xl font-bold text-transparent">
           Annotation Dashboard
         </h2>
       </div>
-      <div className="flex space-x-4">
-        <Card className="h-auto flex-1 py-6">
+
+      <div className="flex space-x-4 px-8 ">
+        <Card className="relative z-30 h-auto flex-1 py-8">
           <CardContent className="flex h-full flex-col justify-between">
             <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">
@@ -262,7 +263,7 @@ const AnnotationDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="h-auto flex-1 py-6">
+        <Card className="relative z-30 h-auto flex-1 py-8">
           <CardContent className="flex h-full flex-col justify-between">
             <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">

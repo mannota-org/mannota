@@ -72,7 +72,7 @@ export function AppSidebar() {
       </Sidebar>
       <SidebarTrigger
         onClick={toggleSidebar}
-        className="absolute right-[-40px] top-[55px] z-10 -translate-y-1/2 transform"
+        className="absolute right-[-52px] top-[55px] z-50 -translate-y-1/2 transform"
       />
     </div>
   );
