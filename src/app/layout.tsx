@@ -27,8 +27,6 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${inter.className} h-full`}>
-        {" "}
-        {/* Apply Inter */}
         <body className="h-full">
           <SignedIn>
             <TRPCReactProvider>
@@ -37,7 +35,7 @@ export default function RootLayout({
                   <AppSidebar />
                   <div className="flex flex-1 flex-col overflow-hidden">
                     <NavigationBar isSignedIn={true} />
-                    <main className="flex-1 overflow-auto bg-gray-100 p-4">
+                    <main className="flex-1 overflow-auto bg-gray-50 p-4">
                       <div className="mx-auto w-full max-w-7xl">{children}</div>
                     </main>
                   </div>

@@ -8,8 +8,8 @@ const NavigationBar = ({ isSignedIn }: { isSignedIn: boolean }) => {
     <nav className="px-8 py-4">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          {isSignedIn && <SidebarTrigger />}
-          <span className="text-xl font-bold">Mannota</span>
+          {/* {isSignedIn && <SidebarTrigger />} */}
+          {/* <span className="text-xl font-bold">Mannota</span> */}
         </div>
         <div>
           {isSignedIn ? (
