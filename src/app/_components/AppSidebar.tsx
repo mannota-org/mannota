@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import Image from "next/image";
+import { UserButton } from "@clerk/nextjs";
 
 const items = [
   {
@@ -48,20 +49,16 @@ export function AppSidebar() {
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                <div className="my-5 flex items-center">
-                  <Image
-                    src="/logo.png"
-                    alt="logo"
-                    width={24} 
-                    height={24} 
-                    className="mx-2"
-                  />
+                <div className="mx-2 mt-8 mb-6 flex flex-row items-center gap-2">
+                  <Image src="/logo.png" alt="logo" width={26} height={26} />
                   <span className="text-xl font-bold">Mannota</span>
+                  <div className="flex-grow" />
+                  <UserButton />
                 </div>
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link href={item.url}>
+                      <Link href={item.url} className="mb-2">
                         <item.icon />
                         <span>{item.title}</span>
                       </Link>
@@ -75,7 +72,7 @@ export function AppSidebar() {
       </Sidebar>
       <SidebarTrigger
         onClick={toggleSidebar}
-        className="absolute right-[-40px] top-[35px] z-10 -translate-y-1/2 transform"
+        className="absolute right-[-40px] top-[55px] z-10 -translate-y-1/2 transform"
       />
     </div>
   );

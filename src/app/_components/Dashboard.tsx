@@ -11,6 +11,7 @@ import { api } from "@/trpc/react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
 import { Card, CardContent } from "@/components/ui/card";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
 
 const AnnotationDashboard: React.FC = () => {
   const [editableText, setEditableText] = useState("");
@@ -44,6 +45,7 @@ const AnnotationDashboard: React.FC = () => {
   const updateBatchPerformanceMutation =
     api.batch.updateBatchPerformance.useMutation({
       onSuccess: () => {
+        setUpdatePerformanceShown(false);
         setNextBatchShown(true);
       },
     });
@@ -74,7 +76,7 @@ const AnnotationDashboard: React.FC = () => {
       setIsPaused(false);
       setUpdatePerformanceShown(false);
     } else {
-      setEditableText("");
+      setEditableText("N/A");
       setUpdatePerformanceShown(true);
       console.warn("Medical text data is empty or undefined");
     }
@@ -161,6 +163,7 @@ const AnnotationDashboard: React.FC = () => {
         title: "Success",
         description: "Batch performance updated successfully",
       });
+      setUpdatePerformanceShown(false);
       setNextBatchShown(true);
     } catch (error) {
       console.error("Error updating batch performance:", error);
@@ -175,14 +178,13 @@ const AnnotationDashboard: React.FC = () => {
   const handleFetchNextBatch = async () => {
     try {
       await refetchMedicalText();
-      setNextBatchShown(false);
-      // If fetch results in no data, show a completed message
       if (!data?.medicalText.length) {
         toast({
           title: "Annotation Completed",
           description: "All batches have been completed.",
         });
       }
+      setNextBatchShown(false);
     } catch (error) {
       toast({
         title: "Error",
@@ -192,7 +194,13 @@ const AnnotationDashboard: React.FC = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   if (!data || (isError && !data.medicalText?.length)) {
     return <div>No medical text available</div>;
@@ -201,111 +209,130 @@ const AnnotationDashboard: React.FC = () => {
   const { medicalText, batch, textLeftToAnnotate, totalTextInBatch } = data;
 
   return (
-    <div className="flex space-x-4">
-      <Card className="h-auto flex-1 py-6">
-        <CardContent className="flex h-full flex-col justify-between">
-          <div className="space-y-4">
-            <div className="grid w-full items-center gap-1.5">
-              <Label>Sample Text</Label>
-              <Textarea
-                value={medicalText?.[0]?.originalText || ""}
-                readOnly
-                className="resize-none bg-gray-100 text-gray-700"
-                disabled
-              />
+    <div>
+      <div className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] relative flex h-[10rem] w-full items-center justify-center bg-white dark:bg-black">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
+        <h2 className="primary relative z-20 mt-12 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text py-8 text-center text-5xl font-bold text-transparent">
+          Annotation Dashboard
+        </h2>
+      </div>
+      <div className="flex space-x-4">
+        <Card className="h-auto flex-1 py-6">
+          <CardContent className="flex h-full flex-col justify-between">
+            <div className="space-y-4">
+              <div className="grid w-full items-center gap-1.5">
+                <Label>Sample Text</Label>
+                <Textarea
+                  value={medicalText?.[0]?.originalText || "N/A"}
+                  readOnly
+                  className="resize-none bg-gray-100 text-gray-700"
+                  disabled
+                />
+              </div>
+              {!updatePerformanceShown && !nextBatchShown && (
+                <>
+                  <div className="flex items-center space-x-2">
+                    <Badge
+                      variant="outline"
+                      className="bg-primary-100 text-primary-800 border-primary-300 text-base"
+                    >
+                      {medicalText?.[0]?.task || "N/A"}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="bg-secondary-100 text-secondary-800 border-secondary-300 text-base"
+                    >
+                      Confidence:{" "}
+                      {medicalText?.[0]?.confidence?.toFixed(1) || "N/A"}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="bg-secondary-100 text-secondary-800 border-secondary-300 text-base"
+                    >
+                      Batch {batch?.index || "N/A"}
+                    </Badge>
+                  </div>
+                  <div>
+                    {textLeftToAnnotate || "N/A"} / {totalTextInBatch || "N/A"}{" "}
+                    text(s) left to annotate.
+                  </div>
+                </>
+              )}
             </div>
-            <div className="flex items-center space-x-2">
-              <Badge
-                variant="outline"
-                className="bg-primary-100 text-primary-800 border-primary-300 text-base"
-              >
-                {medicalText?.[0]?.task || ""}
-              </Badge>
-              <Badge
-                variant="outline"
-                className="bg-secondary-100 text-secondary-800 border-secondary-300 text-base"
-              >
-                Confidence: {medicalText?.[0]?.confidence.toFixed(1)}
-              </Badge>
-              <Badge
-                variant="outline"
-                className="bg-secondary-100 text-secondary-800 border-secondary-300 text-base"
-              >
-                Batch {batch?.index || ""}
-              </Badge>
-            </div>
-            <div>
-              {textLeftToAnnotate} / {totalTextInBatch} text(s) left to
-              annotate.
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      <Card className="h-auto flex-1 py-6">
-        <CardContent className="flex h-full flex-col justify-between">
-          <div className="space-y-4">
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="annotate-text">Annotate Text</Label>
-              <Textarea
-                id="annotate-text"
-                value={editableText || ""}
-                onChange={(e) => setEditableText(e.target.value)}
-                className="mb-2"
-                disabled={!isRunning || isPaused}
-              />
+        <Card className="h-auto flex-1 py-6">
+          <CardContent className="flex h-full flex-col justify-between">
+            <div className="space-y-4">
+              <div className="grid w-full items-center gap-1.5">
+                <Label htmlFor="annotate-text">Annotate Text</Label>
+                <Textarea
+                  id="annotate-text"
+                  value={editableText || ""}
+                  onChange={(e) => setEditableText(e.target.value)}
+                  className="mb-2"
+                  disabled={!isRunning || isPaused}
+                />
+              </div>
+              {!updatePerformanceShown && !nextBatchShown && (
+                <>
+                  <div className="grid w-full items-center gap-1.5">
+                    <Label htmlFor="annotate-reason">Annotate Reason</Label>
+                    <Input
+                      id="annotate-reason"
+                      value={annotateReason || ""}
+                      onChange={(e) => setAnnotateReason(e.target.value)}
+                      placeholder="Give your reason for annotating"
+                      className="mb-2"
+                      disabled={!isRunning || isSubmitting}
+                    />
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button onClick={startTimer} disabled={isRunning}>
+                      Start
+                    </Button>
+                    <Button
+                      onClick={isPaused ? resumeTimer : pauseTimer}
+                      disabled={!isRunning}
+                    >
+                      {isPaused ? "Resume" : "Pause"}
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        stopTimer();
+                        handleSubmit();
+                      }}
+                      disabled={!isRunning || isSubmitting}
+                    >
+                      {isSubmitting && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
+                      Stop & Submit
+                    </Button>
+                    <Badge
+                      variant="outline"
+                      className="bg-primary-100 text-primary-800 border-primary-300 text-base"
+                    >
+                      Time: {seconds}s
+                    </Badge>
+                  </div>
+                </>
+              )}
             </div>
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="annotate-reason">Annotate Reason</Label>
-              <Input
-                id="annotate-reason"
-                value={annotateReason || ""}
-                onChange={(e) => setAnnotateReason(e.target.value)}
-                placeholder="Give your reason for annotating"
-                className="mb-2"
-                disabled={!isRunning || isSubmitting}
-              />
-            </div>
-            <div className="flex space-x-2">
-              <Button onClick={startTimer} disabled={isRunning}>
-                Start
+            {updatePerformanceShown && (
+              <Button onClick={handleUpdatePerformance}>
+                Update Batch Performance
               </Button>
-              <Button
-                onClick={isPaused ? resumeTimer : pauseTimer}
-                disabled={!isRunning}
-              >
-                {isPaused ? "Resume" : "Pause"}
+            )}
+            {nextBatchShown && (
+              <Button onClick={handleFetchNextBatch}>
+                Annotate Next Batch
               </Button>
-              <Button
-                onClick={() => {
-                  stopTimer();
-                  handleSubmit();
-                }}
-                disabled={!isRunning || isSubmitting}
-              >
-                {isSubmitting && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                Stop & Submit
-              </Button>
-              <Badge
-                variant="outline"
-                className="bg-primary-100 text-primary-800 border-primary-300 text-base"
-              >
-                Time: {seconds}s
-              </Badge>
-            </div>
-          </div>
-          {updatePerformanceShown && (
-            <Button onClick={handleUpdatePerformance}>
-              Update Batch Performance
-            </Button>
-          )}
-          {nextBatchShown && (
-            <Button onClick={handleFetchNextBatch}>Annotate Next Batch</Button>
-          )}
-        </CardContent>
-      </Card>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
