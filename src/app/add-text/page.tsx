@@ -5,7 +5,7 @@ import { api } from "@/trpc/react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 
-import type { MedicalTextDataInput, BatchInput } from "../types/types";
+import type { MedicalTextDataInput, BatchInput } from "@/app/types/types";
 
 const AddText = () => {
   const [medicalTextInput, setMedicalTextInput] = useState<string>("");
@@ -15,7 +15,7 @@ const AddText = () => {
 
   const addMedicalTextMutation = api.medicalText.addMedicalText.useMutation({
     onSuccess: (data) => {
-      setMedicalTextInput(""); // Clear input after success
+      setMedicalTextInput(""); 
       toast({
         title: "Success",
         description: "Medical text added successfully.",
