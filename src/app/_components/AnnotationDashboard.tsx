@@ -208,17 +208,19 @@ const AnnotationDashboard: React.FC = () => {
 
   const { medicalText, batch, textLeftToAnnotate, totalTextInBatch } = data;
 
+  // Responsive update to AnnotationDashboard.tsx
+
   return (
-    <div className="h-full w-full overflow-hidden">
-      <div className="relative h-full w-full items-center justify-center bg-white bg-dot-black/[0.4] dark:bg-black dark:bg-dot-white/[0.4]">
+    <div className="min-h-screen w-full overflow-hidden">
+      <div className="relative flex h-full w-full flex-col items-center justify-center bg-white bg-dot-black/[0.4] dark:bg-black dark:bg-dot-white/[0.4]">
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_10%,black)] dark:bg-black"></div>
-        <h2 className="primary relative z-20 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text pb-12 pt-24 text-center text-5xl font-bold text-transparent">
+        <h2 className="primary relative z-20 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text pb-12 pt-24 text-center text-5xl font-bold text-transparent sm:text-3xl md:text-4xl">
           Annotation Dashboard
         </h2>
       </div>
 
-      <div className="flex space-x-4 px-8 ">
-        <Card className="relative z-30 h-auto flex-1 py-8">
+      <div className="flex flex-col space-y-4 p-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8">
+        <Card className="relative z-30 flex-1 py-8">
           <CardContent className="flex h-full flex-col justify-between">
             <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">
@@ -232,7 +234,7 @@ const AnnotationDashboard: React.FC = () => {
               </div>
               {!updatePerformanceShown && !nextBatchShown && (
                 <>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex flex-wrap items-center space-x-2">
                     <Badge
                       variant="outline"
                       className="bg-primary-100 text-primary-800 border-primary-300 text-base"
@@ -263,7 +265,7 @@ const AnnotationDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="relative z-30 h-auto flex-1 py-8">
+        <Card className="relative z-30 flex-1 py-8">
           <CardContent className="flex h-full flex-col justify-between">
             <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">
@@ -289,7 +291,7 @@ const AnnotationDashboard: React.FC = () => {
                       disabled={!isRunning || isSubmitting}
                     />
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-wrap space-x-2">
                     <Button onClick={startTimer} disabled={isRunning}>
                       Start
                     </Button>

@@ -19,7 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 export const OnboardingDialog = () => {
   const [role, setRole] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const router = useRouter(); // Initialize useRouter
+  const router = useRouter(); 
 
   const { user } = useUser();
   const email = user?.primaryEmailAddress?.emailAddress ?? "";
@@ -39,7 +39,7 @@ export const OnboardingDialog = () => {
         setIsOpen(true);
       } else {
         console.log("User already exists, not displaying dialog.");
-        router.push("/dashboard"); // Redirect if user already exists
+        router.push("/dashboard"); 
       }
     }
   }, [isSuccess, userExists, router]);
