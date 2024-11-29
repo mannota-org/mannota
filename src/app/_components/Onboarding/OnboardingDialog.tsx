@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; 
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,9 +19,9 @@ import { useToast } from "@/hooks/use-toast";
 export const OnboardingDialog = () => {
   const [role, setRole] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const router = useRouter(); // Initialize useRouter
 
   const { user } = useUser();
-  // Replace '||' with '??' to account for possible null/undefined values
   const email = user?.primaryEmailAddress?.emailAddress ?? "";
   const fullName = user?.fullName ?? "";
   const { toast } = useToast();
@@ -38,9 +39,10 @@ export const OnboardingDialog = () => {
         setIsOpen(true);
       } else {
         console.log("User already exists, not displaying dialog.");
+        router.push("/dashboard"); // Redirect if user already exists
       }
     }
-  }, [isSuccess, userExists]);
+  }, [isSuccess, userExists, router]);
 
   const checkAndCreateUserMutation = api.user.checkAndCreateUser.useMutation({
     onSuccess: (data) => {
@@ -51,10 +53,10 @@ export const OnboardingDialog = () => {
           description: "User created successfully",
         });
         console.log("User created:", data);
+        router.push("/dashboard"); // Redirect after successful onboarding
       }
     },
     onError: (error: unknown) => {
-      // Change 'any' to 'unknown' to better type the error
       toast({
         title: "Error",
         variant: "destructive",

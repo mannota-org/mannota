@@ -1,6 +1,9 @@
-import { redirect } from "next/navigation";
+import Onboarding from "@/app/_components/Onboarding";
 
-export default async function Home() {
-  redirect("/dashboard"); 
-  return null; 
+export default function Home() {
+  return (
+    <div>
+      <Onboarding />
+    </div>
+  );
 }
