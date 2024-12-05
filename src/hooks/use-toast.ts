@@ -155,6 +155,7 @@ function toast({ ...props }: Toast) {
   dispatch({
     type: "ADD_TOAST",
     toast: {
+      variant: "default",
       ...props,
       id,
       open: true,

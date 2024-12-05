@@ -1,25 +1,40 @@
 "use client";
 
 import { api } from "@/trpc/react";
+import { GitCommitVertical, TrendingUp } from "lucide-react";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import * as React from "react";
 
-const PScoreVisualization: React.FC = () => {
-  const { data: batches, isLoading } =
-    api.batch.fetchBatchPerformances.useQuery();
+const chartConfig = {
+  performance: {
+    label: "Performance Score",
+    color: "hsl(142.1 76.2% 36.3%)",
+  },
+} satisfies ChartConfig;
 
-  React.useEffect(() => {
-    if (batches === undefined || batches.length === 0) {
-      console.warn("No batch performance data available");
-    }
+const PScoreVisualization: React.FC = () => {
+  const { data: batches, isLoading } = api.batch.fetchBatchPerformances.useQuery();
+
+  const chartData = React.useMemo(() => {
+    return batches?.map((batch) => ({
+      batchIndex: `Batch ${batch.index}`,
+      performance: Number(batch.performance.toFixed(1)),
+      updatedAt: batch.updatedAtFormatted
+    })) ?? [];
   }, [batches]);
 
   if (isLoading) {
@@ -31,15 +46,82 @@ const PScoreVisualization: React.FC = () => {
   }
 
   return (
-    <div className="h-full w-full overflow-hidden">
-      <div className="relative h-full w-full items-center justify-center bg-white bg-dot-black/[0.4] dark:bg-black dark:bg-dot-white/[0.4]">
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_10%,black)] dark:bg-black"></div>
-        <h2 className="primary relative z-20 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text pb-12 pt-24 text-center text-5xl font-bold text-transparent">
-          Batch Performance Scores
-        </h2>
-      </div>
+    <div className="h-full w-full overflow-hidden p-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>Batch Performance Scores Analysis</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ChartContainer config={chartConfig}>
+            <LineChart
+              data={chartData}
+              margin={{
+                top: 20,
+                right: 20,
+                left: 20,
+                bottom: 20,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="batchIndex"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={10}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                tickMargin={40}
+                domain={[0, 1]}
+                ticks={[0, 0.2, 0.4, 0.6, 0.8, 1]}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={({ active, payload }) => {
+                  if (!active || !payload?.[0]?.payload) return null;
+                  const data = payload[0];
+                  
+                  return (
+                    <div className="rounded-lg border bg-background p-2 shadow-sm">
+                      <div className="font-medium">{data.payload.batchIndex}</div>
+                      <div className="text-sm text-muted-foreground">
+                        Score: {data.value}
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        Updated: {data.payload.updatedAt}
+                      </div>
+                    </div>
+                  );
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="performance"
+                stroke="hsl(142.1 76.2% 36.3%)"
+                strokeWidth={2}
+                dot={({ cx, cy, payload }) => {
+                  const r = 24;
+                  return (
+                    <GitCommitVertical
+                      key={payload.batchIndex}
+                      x={cx - r / 2}
+                      y={cy - r / 2}
+                      width={r}
+                      height={r}
+                      fill="hsl(var(--background))"
+                      stroke="hsl(142.1 76.2% 36.3%)"
+                    />
+                  );
+                }}
+              />
+            </LineChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
 
-      <div className="px-8 py-4">
+      {/* The table*/}
+      {/* <div className="mt-8">
         <Table>
           <TableHeader>
             <TableRow>
@@ -58,7 +140,7 @@ const PScoreVisualization: React.FC = () => {
             ))}
           </TableBody>
         </Table>
-      </div>
+      </div> */}
     </div>
   );
 };
