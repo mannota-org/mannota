@@ -18,6 +18,14 @@ import {
 } from "@/components/ui/chart";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import * as React from "react";
+import { TooltipProps } from "recharts";
+import { NameType, ValueType } from "recharts/types/component/DefaultTooltipContent";
+
+type ChartDataPoint = {
+  batchIndex: string;
+  performance: number;
+  updatedAt: string;
+};
 
 const chartConfig = {
   performance: {
@@ -78,9 +86,13 @@ const PScoreVisualization: React.FC = () => {
               />
               <ChartTooltip
                 cursor={false}
-                content={({ active, payload }) => {
-                  if (!active || !payload?.[0]?.payload) return null;
-                  const data = payload[0];
+                content={(props: TooltipProps<ValueType, NameType>) => {
+                  if (!props.active || !props.payload?.length) return null;
+                  const data = props.payload[0] as unknown as {
+                    payload: ChartDataPoint;
+                    value: number;
+                  };
+                  if (!data) return null;
                   
                   return (
                     <div className="rounded-lg border bg-background p-2 shadow-sm">
@@ -100,7 +112,11 @@ const PScoreVisualization: React.FC = () => {
                 dataKey="performance"
                 stroke="hsl(142.1 76.2% 36.3%)"
                 strokeWidth={2}
-                dot={({ cx, cy, payload }) => {
+                dot={({ cx, cy, payload }: { 
+                  cx: number; 
+                  cy: number; 
+                  payload: ChartDataPoint;
+                }) => {
                   const r = 24;
                   return (
                     <GitCommitVertical
