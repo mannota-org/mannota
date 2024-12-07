@@ -331,7 +331,7 @@ const AnnotationDashboard: React.FC = () => {
                   </div>
                   {/* Successful annotation message */}
                   {successMessage && (
-                    <div className="mt-2 text-green-500 text-lg font-bold">
+                    <div className="mt-2 text-green-600 text-lg">
                       {successMessage}
                     </div>
                   )}
