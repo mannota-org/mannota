@@ -131,17 +131,12 @@ const AnnotationDashboard: React.FC = () => {
         userId: userData.id,
       });
 
-      //toast success
-      // toast({
-      //   title: "Success",
-      //   variant: "success",
-      //   description: "Medical text annotated successfully",
-      // });
-
-      setSuccessMessage('Medical text annotated successfully');
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 3000);
+      // toast success
+      toast({
+        title: "Success",
+        variant: "success",
+        description: "Medical text annotated successfully",
+      });
 
       setAnnotateReason("");
     } catch (error) {
@@ -329,12 +324,6 @@ const AnnotationDashboard: React.FC = () => {
                       Time: {seconds}s
                     </Badge>
                   </div>
-                  {/* Successful annotation message */}
-                  {successMessage && (
-                    <div className="mt-2 text-green-600 text-lg">
-                      {successMessage}
-                    </div>
-                  )}
                 </>
               )}
             </div>
