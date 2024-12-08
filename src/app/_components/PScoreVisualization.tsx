@@ -37,11 +37,19 @@ const chartConfig = {
 const PScoreVisualization: React.FC = () => {
   const { data: batches, isLoading } = api.batch.fetchBatchPerformances.useQuery();
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear());
+    return `${day}/${month}/${year}`;
+  };
+
   const chartData = React.useMemo(() => {
     return batches?.map((batch) => ({
       batchIndex: `Batch ${batch.index}`,
       performance: Number(batch.performance.toFixed(1)),
-      updatedAt: batch.updatedAtFormatted
+      updatedAt: formatDate(batch.updatedAtFormatted)
     })) ?? [];
   }, [batches]);
 
