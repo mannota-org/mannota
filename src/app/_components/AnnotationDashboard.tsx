@@ -23,6 +23,7 @@ const AnnotationDashboard: React.FC = () => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [updatePerformanceShown, setUpdatePerformanceShown] = useState(false);
   const [nextBatchShown, setNextBatchShown] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const { user } = useUser();
   const { toast } = useToast();
@@ -130,10 +131,13 @@ const AnnotationDashboard: React.FC = () => {
         userId: userData.id,
       });
 
+      // toast success
       toast({
         title: "Success",
+        variant: "success",
         description: "Medical text annotated successfully",
       });
+
       setAnnotateReason("");
     } catch (error) {
       console.error("Error updating medical text:", error);

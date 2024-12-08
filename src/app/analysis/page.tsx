@@ -1,12 +1,12 @@
 import { SignedIn } from "@clerk/nextjs";
-import PScoreVisualization from "../_components/PScoreVisualization";
+import PScoreVisualization from "@/app/_components/PScoreVisualization";
 
-const Dashboard = () => {
+const Analysis = () => {
   return (
     <SignedIn>
-      <PScoreVisualization/>
+      <PScoreVisualization />
     </SignedIn>
   );
 };
 
-export default Dashboard;
+export default Analysis;

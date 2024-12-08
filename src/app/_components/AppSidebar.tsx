@@ -1,5 +1,5 @@
 "use client";
-import { Calendar, History, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, History, Home, Inbox, Search, Settings, BarChart } from "lucide-react";
 import React, { useState } from "react";
 import {
   Sidebar,
@@ -30,6 +30,11 @@ const items = [
     title: "Settings",
     url: "/settings",
     icon: Settings,
+  },
+  {
+    title: "Analysis",
+    url: "/analysis",
+    icon: BarChart,
   },
 ];
 
