@@ -131,6 +131,7 @@ export const medicalTextRouter = createTRPCRouter({
       ...text,
       Batch: `Batch ${text.Batch?.index ?? "N/A"} (${(text.Batch?.performance ?? 0).toFixed(1)} PScore)`,
       updatedAtFormatted: new Date(text.updatedAt).toLocaleString("en-GB", {
+        timeZone: "Asia/Ho_Chi_Minh",
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
