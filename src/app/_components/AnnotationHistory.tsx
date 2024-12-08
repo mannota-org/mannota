@@ -20,10 +20,19 @@ import {
 import Link from "next/link";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import * as React from "react";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext } from "@/components/ui/pagination";
 
 const AnnotationHistory: React.FC = () => {
-  const { data: history, isLoading } =
-    api.medicalText.fetchAnnotationHistory.useQuery();
+  const [page, setPage] = React.useState(1);
+  const limit = 10;
+  
+  const { data, isLoading } =
+    api.medicalText.fetchAnnotationHistory.useQuery({
+      page,
+      limit,
+    });
+  
+  const totalPages = data ? Math.ceil(data.totalCount / limit) : 0;
 
   React.useEffect(() => {
     if (history === undefined || history.length === 0) {
@@ -60,7 +69,7 @@ const AnnotationHistory: React.FC = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {history?.map((entry) => (
+            {data?.history.map((entry) => (
               <TableRow key={entry.id}>
                 <TableCell>{entry.originalText}</TableCell>
                 <TableCell>{entry.annotatedText}</TableCell>
@@ -149,6 +158,29 @@ const AnnotationHistory: React.FC = () => {
           </TableBody>
         </Table>
       </div>
+
+      <Pagination className="mt-4">
+      <PaginationContent>
+          <PaginationPrevious
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            disabled={page === 1}
+          />
+          {Array.from({ length: totalPages }, (_, index) => (
+            <PaginationItem key={index}>
+              <PaginationLink
+                isActive={page === index + 1}
+                onClick={() => setPage(index + 1)}
+              >
+                {index + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+          <PaginationNext
+            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={page === totalPages}
+          />
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };
