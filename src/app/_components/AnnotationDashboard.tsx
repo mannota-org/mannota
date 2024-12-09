@@ -131,7 +131,7 @@ const AnnotationDashboard: React.FC = () => {
         userId: userData.id,
       });
 
-      // toast success
+      // Toast success
       toast({
         title: "Success",
         variant: "success",
