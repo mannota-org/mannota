@@ -20,7 +20,7 @@ import {
 import Link from "next/link";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import * as React from "react";
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext } from "@/components/ui/pagination";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis } from "@/components/ui/pagination";
 
 const AnnotationHistory: React.FC = () => {
   const [page, setPage] = React.useState(1);
@@ -165,17 +165,50 @@ const AnnotationHistory: React.FC = () => {
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
             disabled={page === 1}
           />
-          {Array.from({ length: totalPages }, (_, index) => (
-            <PaginationItem key={index}>
-              <PaginationLink
-                isActive={page === index + 1}
-                onClick={() => setPage(index + 1)}
-                disabled={page === index + 1}
-              >
-                {index + 1}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
+          {Array.from({ length: totalPages }, (_, index) => 
+          {
+            const pageIndex = index + 1;
+            const isNearCurrentPage = Math.abs(pageIndex - page) <= 2;
+            const isFirstFewPages = pageIndex <= 3;
+            const isLastFewPages = pageIndex > totalPages - 3;
+      
+            if (isNearCurrentPage || isFirstFewPages || isLastFewPages) {
+              return (
+                <PaginationItem key={index}>
+                  <PaginationLink
+                    isActive={page === pageIndex}
+                    onClick={() => setPage(pageIndex)}
+                    disabled={page === pageIndex}
+                  >
+                    {pageIndex}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            }
+      
+            if (pageIndex === 4 || pageIndex === totalPages - 3) {
+              return (
+                <PaginationItem key={index}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
+            }
+      
+            return null;
+          }
+
+          // (
+          //   <PaginationItem key={index}>
+          //     <PaginationLink
+          //       isActive={page === index + 1}
+          //       onClick={() => setPage(index + 1)}
+          //       disabled={page === index + 1}
+          //     >
+          //       {index + 1}
+          //     </PaginationLink>
+          //   </PaginationItem>
+          // )
+          )}
           <PaginationNext
             onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
             disabled={page === totalPages}
