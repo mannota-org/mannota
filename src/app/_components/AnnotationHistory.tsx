@@ -43,6 +43,27 @@ const AnnotationHistory: React.FC = () => {
   const endIndex = startIndex + itemsPerPage;
   const currentItems = history?.slice(startIndex, endIndex);
 
+  const maxPagesToShow = 10;
+  let startPage: number;
+  let endPage: number;
+
+  if (totalPages <= maxPagesToShow) {
+    startPage = 1;
+    endPage = totalPages;
+  } else {
+    const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
+    
+    if (currentPage <= halfMaxPagesToShow) {
+      startPage = 1;
+      endPage = maxPagesToShow;
+    } else if (currentPage + halfMaxPagesToShow >= totalPages) {
+      startPage = totalPages - maxPagesToShow + 1;
+      endPage = totalPages;
+    } else {
+      startPage = currentPage - halfMaxPagesToShow;
+      endPage = currentPage + halfMaxPagesToShow;
+    }
+  }
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -181,7 +202,7 @@ const AnnotationHistory: React.FC = () => {
                 />
               </PaginationItem>
               
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
                 <PaginationItem key={page}>
                   <PaginationLink
                     onClick={() => handlePageChange(page)}
