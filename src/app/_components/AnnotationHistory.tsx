@@ -159,7 +159,7 @@ const AnnotationHistory: React.FC = () => {
         </Table>
       </div>
 
-      <Pagination className="mt-4">
+      <Pagination className="mt-2 mb-12">
       <PaginationContent>
           <PaginationPrevious
             onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
@@ -170,6 +170,7 @@ const AnnotationHistory: React.FC = () => {
               <PaginationLink
                 isActive={page === index + 1}
                 onClick={() => setPage(index + 1)}
+                disabled={page === index + 1}
               >
                 {index + 1}
               </PaginationLink>
