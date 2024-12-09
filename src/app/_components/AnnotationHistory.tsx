@@ -57,7 +57,7 @@ const AnnotationHistory: React.FC = () => {
       startPage = 1;
       endPage = maxPagesToShow;
     } else if (currentPage + halfMaxPagesToShow >= totalPages) {
-      startPage = totalPages - maxPagesToShow + 1;
+      startPage = totalPages - maxPagesToShow;
       endPage = totalPages;
     } else {
       startPage = currentPage - halfMaxPagesToShow;
@@ -207,7 +207,7 @@ const AnnotationHistory: React.FC = () => {
                   <PaginationLink
                     onClick={() => handlePageChange(page)}
                     isActive={currentPage === page}
-                    className={`cursor-pointer ${currentPage === page ? 'bg-green-400' : 'bg-white-700'}`}
+                    className={`cursor-pointer ${currentPage === page ? 'bg-green-300' : 'bg-white-700'}`}
                   >
                     {page}
                   </PaginationLink>
