@@ -186,7 +186,7 @@ const AnnotationHistory: React.FC = () => {
                   <PaginationLink
                     onClick={() => handlePageChange(page)}
                     isActive={currentPage === page}
-                    className="cursor-pointer"
+                    className={`cursor-pointer ${currentPage === page ? 'bg-green-400' : 'bg-white-700'}`}
                   >
                     {page}
                   </PaginationLink>
