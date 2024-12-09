@@ -20,15 +20,7 @@ import {
 import Link from "next/link";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import * as React from "react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
+import PaginationComponent from "@/components/ui/PaginationComponent";    
 
 const AnnotationHistory: React.FC = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -43,27 +35,6 @@ const AnnotationHistory: React.FC = () => {
   const endIndex = startIndex + itemsPerPage;
   const currentItems = history?.slice(startIndex, endIndex);
 
-  const maxPagesToShow = 10;
-  let startPage: number;
-  let endPage: number;
-
-  if (totalPages <= maxPagesToShow) {
-    startPage = 1;
-    endPage = totalPages;
-  } else {
-    const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
-    
-    if (currentPage <= halfMaxPagesToShow) {
-      startPage = 1;
-      endPage = maxPagesToShow;
-    } else if (currentPage + halfMaxPagesToShow >= totalPages) {
-      startPage = totalPages - maxPagesToShow;
-      endPage = totalPages;
-    } else {
-      startPage = currentPage - halfMaxPagesToShow;
-      endPage = currentPage + halfMaxPagesToShow;
-    }
-  }
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -193,35 +164,12 @@ const AnnotationHistory: React.FC = () => {
         </Table>
 
         <div className="mt-4">
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => handlePageChange(currentPage - 1)}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                />
-              </PaginationItem>
-              
-              {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
-                <PaginationItem key={page}>
-                  <PaginationLink
-                    onClick={() => handlePageChange(page)}
-                    isActive={currentPage === page}
-                    className={`cursor-pointer ${currentPage === page ? 'bg-green-300' : 'bg-white-700'}`}
-                  >
-                    {page}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => handlePageChange(currentPage + 1)}
-                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <PaginationComponent 
+            currentPage={currentPage}
+            totalItems={totalItems}
+            itemsPerPage={itemsPerPage}
+            onPageChange={handlePageChange}
+          />
         </div>
       </div>
     </div>
