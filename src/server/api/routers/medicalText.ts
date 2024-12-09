@@ -130,7 +130,7 @@ export const medicalTextRouter = createTRPCRouter({
     return history.map((text) => ({
       ...text,
       Batch: `Batch ${text.Batch?.index ?? "N/A"}`, // Only includes batch index
-      Performance: `${(text.Batch?.performance ?? 0).toFixed(1)} PScore`, // New field for performance score
+      Performance: `${(text.Batch?.performance ?? 0).toFixed(1)}`, // New field for performance score
       updatedAtFormatted: new Date(text.updatedAt).toLocaleString("en-GB", {
         day: "2-digit",
         month: "2-digit",
