@@ -158,7 +158,6 @@ const AnnotationHistory: React.FC = () => {
           </TableBody>
         </Table>
       </div>
-
       <Pagination className="mt-2 mb-12">
       <PaginationContent>
           <PaginationPrevious
@@ -186,7 +185,15 @@ const AnnotationHistory: React.FC = () => {
               );
             }
       
-            if (pageIndex === 4 || pageIndex === totalPages - 3) {
+            if (pageIndex === 4 && page > 4) {
+              return (
+                <PaginationItem key={index}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
+            }
+
+            if (pageIndex === totalPages - 3 && page < totalPages - 3) {
               return (
                 <PaginationItem key={index}>
                   <PaginationEllipsis />
