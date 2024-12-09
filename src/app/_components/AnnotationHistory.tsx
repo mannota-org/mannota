@@ -20,10 +20,34 @@ import {
 import Link from "next/link";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import * as React from "react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 const AnnotationHistory: React.FC = () => {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const itemsPerPage = 10;
+
   const { data: history, isLoading } =
     api.medicalText.fetchAnnotationHistory.useQuery();
+
+  // Calculate pagination values
+  const totalItems = history?.length ?? 0;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = history?.slice(startIndex, endIndex);
+
+  // Handle page changes
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   React.useEffect(() => {
     if (history === undefined || history.length === 0) {
@@ -60,7 +84,7 @@ const AnnotationHistory: React.FC = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {history?.map((entry) => (
+            {currentItems?.map((entry) => (
               <TableRow key={entry.id}>
                 <TableCell>{entry.originalText}</TableCell>
                 <TableCell>{entry.annotatedText}</TableCell>
@@ -148,6 +172,39 @@ const AnnotationHistory: React.FC = () => {
             ))}
           </TableBody>
         </Table>
+
+        {/* Add pagination controls */}
+        <div className="mt-4">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+              
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <PaginationItem key={page}>
+                  <PaginationLink
+                    onClick={() => handlePageChange(page)}
+                    isActive={currentPage === page}
+                    className="cursor-pointer"
+                  >
+                    {page}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
       </div>
     </div>
   );
