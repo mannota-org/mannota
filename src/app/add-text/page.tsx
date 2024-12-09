@@ -123,7 +123,7 @@ const AddText = () => {
             {
               index: 1,
               confidence: 0.75,
-              performance: 85.5,
+              performance: 0.5,
             },
             null,
             2,
