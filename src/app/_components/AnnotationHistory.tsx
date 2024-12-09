@@ -37,14 +37,12 @@ const AnnotationHistory: React.FC = () => {
   const { data: history, isLoading } =
     api.medicalText.fetchAnnotationHistory.useQuery();
 
-  // Calculate pagination values
   const totalItems = history?.length ?? 0;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = history?.slice(startIndex, endIndex);
 
-  // Handle page changes
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -173,7 +171,6 @@ const AnnotationHistory: React.FC = () => {
           </TableBody>
         </Table>
 
-        {/* Add pagination controls */}
         <div className="mt-4">
           <Pagination>
             <PaginationContent>
