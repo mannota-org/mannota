@@ -203,18 +203,6 @@ const AnnotationHistory: React.FC = () => {
       
             return null;
           }
-
-          // (
-          //   <PaginationItem key={index}>
-          //     <PaginationLink
-          //       isActive={page === index + 1}
-          //       onClick={() => setPage(index + 1)}
-          //       disabled={page === index + 1}
-          //     >
-          //       {index + 1}
-          //     </PaginationLink>
-          //   </PaginationItem>
-          // )
           )}
           <PaginationNext
             onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}

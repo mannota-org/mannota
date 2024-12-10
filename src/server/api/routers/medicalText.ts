@@ -114,34 +114,6 @@ export const medicalTextRouter = createTRPCRouter({
       return updatedMedicalText;
     }),
 
-  // fetchAnnotationHistory: publicProcedure.query(async () => {
-  //   const history = await db.medicalTextData.findMany({
-  //     orderBy: { updatedAt: "desc" },
-  //     include: {
-  //       Batch: {
-  //         select: { index: true, performance: true },
-  //       },
-  //       User: {
-  //         select: { name: true, email: true, role: true },
-  //       },
-  //     },
-  //   });
-
-  //   return history.map((text) => ({
-  //     ...text,
-  //     Batch: `Batch ${text.Batch?.index ?? "N/A"} (${(text.Batch?.performance ?? 0).toFixed(1)} PScore)`,
-  //     updatedAtFormatted: new Date(text.updatedAt).toLocaleString("en-GB", {
-  //       timeZone: "Asia/Ho_Chi_Minh",
-  //       day: "2-digit",
-  //       month: "2-digit",
-  //       year: "numeric",
-  //       hour: "2-digit",
-  //       minute: "2-digit",
-  //       second: "2-digit",
-  //     }),
-  //   }));
-  // }),
-
   fetchAnnotationHistory: publicProcedure
     .input(
       z.object({
