@@ -61,7 +61,7 @@ const AnnotationGuidelines: React.FC<AnnotationGuidelinesProps> = ({
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="space-y-4">
         <h6 className="text-xl font-semibold text-center">Task Explanation</h6>
-        <ReactMarkdown className="text-sm">{taskExplanation}</ReactMarkdown> 
+        <ReactMarkdown>{taskExplanation}</ReactMarkdown> 
 
         <div className="flex justify-end mt-4 pr-4">
           <Dialog open={isModalOpen1} onOpenChange={setIsModalOpen1}>
@@ -74,9 +74,7 @@ const AnnotationGuidelines: React.FC<AnnotationGuidelinesProps> = ({
                 <DialogTitle>Task Details</DialogTitle>
               </DialogHeader>
               <DialogDescription>
-                <div className="space-y-4">
-                  <ReactMarkdown>{taskDetails}</ReactMarkdown> 
-                </div>
+                <ReactMarkdown>{taskDetails}</ReactMarkdown> 
               </DialogDescription>
             </DialogContent>
           </Dialog>
@@ -85,7 +83,7 @@ const AnnotationGuidelines: React.FC<AnnotationGuidelinesProps> = ({
 
       <div className="space-y-4">
         <h6 className="text-xl font-semibold text-center">Annotation Guidelines</h6>
-        <ReactMarkdown className="text-sm">{annotationExplanation}</ReactMarkdown>
+        <ReactMarkdown>{annotationExplanation}</ReactMarkdown>
 
         <div className="flex justify-end mt-4 pr-4">
           <Dialog open={isModalOpen2} onOpenChange={setIsModalOpen2}>
