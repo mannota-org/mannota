@@ -26,6 +26,7 @@ import {
   PaginationNext,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
+import Header from "./Header";
 
 const AnnotationHistory: React.FC = () => {
   const [page, setPage] = React.useState(1);
@@ -56,13 +57,7 @@ const AnnotationHistory: React.FC = () => {
 
   return (
     <div className="flex h-[100dvh] w-full flex-col overflow-hidden">
-      {" "}
-      <div className="relative flex h-32 flex-shrink-0 items-center justify-center bg-white bg-dot-black/[0.4] dark:bg-black dark:bg-dot-white/[0.4] sm:h-40">
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_10%,black)] dark:bg-black"></div>
-        <h2 className="relative z-20 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text pt-12 text-center text-3xl font-bold text-transparent sm:text-5xl">
-          Annotation History
-        </h2>
-      </div>
+      <Header title="Annotation History" />
       <div className="flex flex-1 flex-col overflow-hidden px-8">
         <div className="flex-1 overflow-auto">
           <Table>

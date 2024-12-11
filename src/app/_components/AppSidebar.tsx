@@ -62,12 +62,14 @@ export function AppSidebar() {
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                <div className="mx-2 mb-6 mt-8 flex flex-row items-center gap-2">
-                  <Image src="/logo.png" alt="logo" width={26} height={26} />
-                  <span className="text-xl font-bold">Mannota</span>
-                  <div className="flex-grow" />
-                  <UserButton />
-                </div>
+                <Link href="/" className="mb-2">
+                  <div className="mx-2 mb-6 mt-8 flex flex-row items-center gap-2">
+                    <Image src="/logo.png" alt="logo" width={26} height={26} />
+                    <span className="text-xl font-bold">Mannota</span>
+                    <div className="flex-grow" />
+                    <UserButton />
+                  </div>
+                </Link>
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>

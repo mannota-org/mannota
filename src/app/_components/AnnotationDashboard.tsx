@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
 import { Card, CardContent } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import Header from "./Header";
 
 const AnnotationDashboard: React.FC = () => {
   const [editableText, setEditableText] = useState("");
@@ -216,12 +217,7 @@ const AnnotationDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full overflow-hidden">
-      <div className="relative flex h-full w-full flex-col items-center justify-center bg-white bg-dot-black/[0.4] dark:bg-black dark:bg-dot-white/[0.4]">
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_10%,black)] dark:bg-black"></div>
-        <h2 className="primary relative z-20 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text pb-12 pt-24 text-center text-5xl font-bold text-transparent">
-          Annotation Dashboard
-        </h2>
-      </div>
+      <Header title="Annotation Dashboard" />
 
       <div className="flex flex-col space-y-4 py-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8">
         <Card className="relative z-30 flex-1 py-8">
@@ -340,7 +336,7 @@ const AnnotationDashboard: React.FC = () => {
           </CardContent>
         </Card>
       </div>
-      <div className="flex flex-col space-y-4 py-1 md:flex-row md:space-x-4 md:space-y-0 md:px-24">
+      <div className="flex flex-col space-y-4 py-1 md:flex-row md:space-x-4 md:space-y-0 md:px-8">
         <Card className="relative z-30 flex-1 py-8">
           <CardContent className="flex h-full flex-col justify-between">
             Task Explanation Simplify: Reword the text to make it easier to

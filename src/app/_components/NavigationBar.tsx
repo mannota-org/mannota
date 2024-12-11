@@ -15,9 +15,12 @@ const NavigationBar = ({ isSignedIn }: { isSignedIn: boolean }) => {
           {isSignedIn ? (
             <UserButton />
           ) : (
+            <div className="flex items-center space-x-4">
+              <span className="text-xl font-bold">Mannota</span>
             <Button className="rounded-xl bg-[#5AA676] px-4 py-2 text-lg font-medium text-white">
               <SignInButton mode="modal" />
             </Button>
+            </div>
           )}
         </div>
       </div>
