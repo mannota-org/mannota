@@ -125,26 +125,28 @@ export const medicalTextRouter = createTRPCRouter({
       const { page, limit } = input;
       const offset = (page - 1) * limit;
 
-      const history = await db.medicalTextData.findMany({
-        skip: offset,
-        take: limit,
-        orderBy: { updatedAt: "desc" },
-        include: {
-          Batch: {
-            select: { index: true, performance: true }
+      const [history, totalCount] = await Promise.all([
+        db.medicalTextData.findMany({
+          skip: offset,
+          take: limit,
+          orderBy: { updatedAt: "desc" },
+          include: {
+            Batch: {
+              select: { index: true, performance: true }
+            },
+            User: {
+              select: { name: true, email: true, role: true }
+            },
           },
-          User: {
-            select: { name: true, email: true, role: true }
-          },
-        },
-      });
-
-      const totalCount = await db.medicalTextData.count();
+        }),
+        db.medicalTextData.count(),
+      ]);
 
       return {
         history: history.map((text) => ({
           ...text,
-          Batch: `Batch ${text.Batch?.index ?? "N/A"} (${(text.Batch?.performance ?? 0).toFixed(1)} PScore)`,
+          Batch: `Batch ${text.Batch?.index ?? "N/A"}`,
+          Performance: `${(text.Batch?.performance ?? 0).toFixed(1)}`,
           updatedAtFormatted: new Date(text.updatedAt).toLocaleString("en-GB", {
             timeZone: "Asia/Ho_Chi_Minh",
             day: "2-digit",
@@ -156,8 +158,8 @@ export const medicalTextRouter = createTRPCRouter({
           }),
         })),
         totalCount,
-      }
-    })
+      };
+    }),
 });
 
 export default medicalTextRouter;

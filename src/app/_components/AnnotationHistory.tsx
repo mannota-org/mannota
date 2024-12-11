@@ -12,12 +12,9 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import Link from "next/link";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import * as React from "react";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis } from "@/components/ui/pagination";
@@ -67,96 +64,96 @@ const AnnotationHistory: React.FC = () => {
               <TableHead className="w-1/4">Original Text</TableHead>
               <TableHead className="w-1/4">Annotated Text</TableHead>
               <TableHead className="w-1/8">Batch Info</TableHead>
+              <TableHead className="w-1/8">Performance</TableHead>
               <TableHead>Updated At</TableHead>
-              <TableHead>Details</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {data?.history.map((entry) => (
-              <TableRow key={entry.id}>
-                <TableCell>{entry.originalText}</TableCell>
-                <TableCell>{entry.annotatedText}</TableCell>
-                <TableCell>{entry.Batch}</TableCell>
-                <TableCell>{entry.updatedAtFormatted}</TableCell>
-                <TableCell>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Link href="#" className="text-left font-bold">
-                        View details
-                      </Link>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle className="pl-2">
-                          Annotation Details
-                        </DialogTitle>
-                      </DialogHeader>
-                      <DialogDescription>
-                        <div className="grid gap-4">
-                          <div>
-                            <strong className="pl-2">Text:</strong>
-                            <Table>
-                              <TableBody>
-                                <TableRow>
-                                  <TableCell className="w-1/3">
-                                    Original Text
-                                  </TableCell>
-                                  <TableCell>{entry.originalText}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>Annotated Text</TableCell>
-                                  <TableCell>{entry.annotatedText}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>Task</TableCell>
-                                  <TableCell>{entry.task}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>Batch</TableCell>
-                                  <TableCell>{entry.Batch}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>Annotation Time</TableCell>
-                                  <TableCell>{entry.annotateTime}s</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>Updated</TableCell>
-                                  <TableCell>
-                                    {entry.updatedAtFormatted}
-                                  </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>Reason</TableCell>
-                                  <TableCell>{entry.annotateReason}</TableCell>
-                                </TableRow>
-                              </TableBody>
-                            </Table>
-                          </div>
-                          <div>
-                            <strong className="pl-2">Annotator:</strong>
-                            <Table>
-                              <TableBody>
-                                <TableRow>
-                                  <TableCell className="w-1/3">Name</TableCell>
-                                  <TableCell>{entry.User?.name}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>Email</TableCell>
-                                  <TableCell>{entry.User?.email}</TableCell>
-                                </TableRow>
-                                <TableRow>
-                                  <TableCell>Role</TableCell>
-                                  <TableCell>{entry.User?.role}</TableCell>
-                                </TableRow>
-                              </TableBody>
-                            </Table>
-                          </div>
+              <React.Fragment key={entry.id}>
+                <TableRow
+                  onClick={() => setOpenDialog(entry.id)} // Open the dialog for this entry
+                  className="cursor-pointer hover:bg-gray-100"
+                >
+                  <TableCell>{entry.originalText}</TableCell>
+                  <TableCell>{entry.annotatedText}</TableCell>
+                  <TableCell>{entry.Batch}</TableCell>
+                  <TableCell>{entry.Performance}</TableCell>
+                  <TableCell>{entry.updatedAtFormatted}</TableCell>
+                </TableRow>
+                <Dialog
+                  open={openDialog === entry.id}
+                  onOpenChange={() => setOpenDialog(null)} // Close the dialog
+                >
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="pl-2">Annotation Details</DialogTitle>
+                    </DialogHeader>
+                    <div className="text-sm text-muted-foreground">
+                      <div className="grid gap-4">
+                        <div>
+                          <strong className="pl-2">Text:</strong>
+                          <Table>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell className="w-1/3">Original Text</TableCell>
+                                <TableCell>{entry.originalText}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>Annotated Text</TableCell>
+                                <TableCell>{entry.annotatedText}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>Task</TableCell>
+                                <TableCell>{entry.task}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>Batch</TableCell>
+                                <TableCell>{entry.Batch}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>Performance</TableCell>
+                                <TableCell>{entry.Performance}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>Annotation Time</TableCell>
+                                <TableCell>{entry.annotateTime}s</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>Updated</TableCell>
+                                <TableCell>{entry.updatedAtFormatted}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>Reason</TableCell>
+                                <TableCell>{entry.annotateReason}</TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
                         </div>
-                      </DialogDescription>
-                    </DialogContent>
-                  </Dialog>
-                </TableCell>
-              </TableRow>
+                        <div>
+                          <strong className="pl-2">Annotator:</strong>
+                          <Table>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell className="w-1/3">Name</TableCell>
+                                <TableCell>{entry.User?.name}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>Email</TableCell>
+                                <TableCell>{entry.User?.email}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>Role</TableCell>
+                                <TableCell>{entry.User?.role}</TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </div>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </React.Fragment>
             ))}
           </TableBody>
         </Table>
