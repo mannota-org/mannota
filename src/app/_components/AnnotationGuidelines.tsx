@@ -1,7 +1,7 @@
 import React from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import ReactMarkdown from "react-markdown"; // Import react-markdown to render markdown content
+import ReactMarkdown from "react-markdown";
 
 interface AnnotationGuidelinesProps {
   isModalOpen1: boolean;
@@ -59,10 +59,9 @@ const AnnotationGuidelines: React.FC<AnnotationGuidelinesProps> = ({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {/* Column 1: Task Explanation */}
       <div className="space-y-4">
         <h6 className="text-xl font-semibold text-center">Task Explanation</h6>
-        <ReactMarkdown className="text-sm">{taskExplanation}</ReactMarkdown> {/* Render markdown content */}
+        <ReactMarkdown className="text-sm">{taskExplanation}</ReactMarkdown> 
 
         <div className="flex justify-end mt-4 pr-4">
           <Dialog open={isModalOpen1} onOpenChange={setIsModalOpen1}>
@@ -76,7 +75,7 @@ const AnnotationGuidelines: React.FC<AnnotationGuidelinesProps> = ({
               </DialogHeader>
               <DialogDescription>
                 <div className="space-y-4">
-                  <ReactMarkdown>{taskDetails}</ReactMarkdown> {/* Render markdown content */}
+                  <ReactMarkdown>{taskDetails}</ReactMarkdown> 
                 </div>
               </DialogDescription>
             </DialogContent>
@@ -84,10 +83,9 @@ const AnnotationGuidelines: React.FC<AnnotationGuidelinesProps> = ({
         </div>
       </div>
 
-      {/* Column 2: Annotation Guidelines */}
       <div className="space-y-4">
         <h6 className="text-xl font-semibold text-center">Annotation Guidelines</h6>
-        <ReactMarkdown className="text-sm">{annotationDetails}</ReactMarkdown> {/* Render markdown content */}
+        <ReactMarkdown className="text-sm">{annotationDetails}</ReactMarkdown>
 
         <div className="flex justify-end mt-4 pr-4">
           <Dialog open={isModalOpen2} onOpenChange={setIsModalOpen2}>
@@ -100,7 +98,7 @@ const AnnotationGuidelines: React.FC<AnnotationGuidelinesProps> = ({
                 <DialogTitle>More Details</DialogTitle>
               </DialogHeader>
               <DialogDescription>
-                <ReactMarkdown>{annotationGuidelines}</ReactMarkdown> {/* Render markdown content */}
+                <ReactMarkdown>{annotationGuidelines}</ReactMarkdown>
               </DialogDescription>
             </DialogContent>
           </Dialog>
