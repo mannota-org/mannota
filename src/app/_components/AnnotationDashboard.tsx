@@ -12,6 +12,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
 import { Card, CardContent } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import AnnotationGuidelines from "./AnnotationGuidelines";
+
 
 const AnnotationDashboard: React.FC = () => {
   const [editableText, setEditableText] = useState("");
@@ -24,7 +26,8 @@ const AnnotationDashboard: React.FC = () => {
   const [updatePerformanceShown, setUpdatePerformanceShown] = useState(false);
   const [nextBatchShown, setNextBatchShown] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
   const { user } = useUser();
   const { toast } = useToast();
   const email = user?.primaryEmailAddress?.emailAddress ?? "";
@@ -339,6 +342,15 @@ const AnnotationDashboard: React.FC = () => {
             )}
           </CardContent>
         </Card>
+      </div>
+
+      <div className="container mx-auto px-4 py-6">
+        <AnnotationGuidelines
+          isModalOpen1={isModalOpen1}
+          setIsModalOpen1={setIsModalOpen1}
+          isModalOpen2={isModalOpen2}
+          setIsModalOpen2={setIsModalOpen2}
+        />
       </div>
     </div>
   );
