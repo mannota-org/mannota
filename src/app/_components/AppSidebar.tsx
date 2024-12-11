@@ -1,5 +1,13 @@
 "use client";
-import { Calendar, History, Home, Inbox, Search, Settings, BarChart } from "lucide-react";
+import {
+  Calendar,
+  History,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+  BarChart,
+} from "lucide-react";
 import React, { useState } from "react";
 import {
   Sidebar,
@@ -27,14 +35,14 @@ const items = [
     icon: History,
   },
   {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-  {
     title: "Analysis",
     url: "/analysis",
     icon: BarChart,
+  },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: Settings,
   },
 ];
 
@@ -54,7 +62,7 @@ export function AppSidebar() {
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                <div className="mx-2 mt-8 mb-6 flex flex-row items-center gap-2">
+                <div className="mx-2 mb-6 mt-8 flex flex-row items-center gap-2">
                   <Image src="/logo.png" alt="logo" width={26} height={26} />
                   <span className="text-xl font-bold">Mannota</span>
                   <div className="flex-grow" />

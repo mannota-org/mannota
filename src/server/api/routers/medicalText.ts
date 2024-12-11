@@ -2,6 +2,13 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
 
+const formatRole = (role: string) => {
+  return role
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
 export const medicalTextRouter = createTRPCRouter({
   addMedicalText: publicProcedure
     .input(
@@ -119,7 +126,7 @@ export const medicalTextRouter = createTRPCRouter({
       z.object({
         page: z.number().min(1),
         limit: z.number().min(1).max(100),
-      })
+      }),
     )
     .query(async ({ input }) => {
       const { page, limit } = input;
@@ -132,31 +139,51 @@ export const medicalTextRouter = createTRPCRouter({
           orderBy: { updatedAt: "desc" },
           include: {
             Batch: {
-              select: { index: true, performance: true }
+              select: { index: true, performance: true },
             },
             User: {
-              select: { name: true, email: true, role: true }
+              select: { name: true, email: true, role: true },
             },
           },
         }),
         db.medicalTextData.count(),
       ]);
 
-      return {
-        history: history.map((text) => ({
-          ...text,
-          Batch: `Batch ${text.Batch?.index ?? "N/A"}`,
-          Performance: `${(text.Batch?.performance ?? 0).toFixed(1)}`,
-          updatedAtFormatted: new Date(text.updatedAt).toLocaleString("en-GB", {
+      const formattedHistory = history.map((text) => {
+        const updatedAtFormatted = [
+          new Date(text.updatedAt).toLocaleString("en-GB", {
             timeZone: "Asia/Ho_Chi_Minh",
             day: "2-digit",
             month: "2-digit",
             year: "numeric",
+          }),
+          new Date(text.updatedAt).toLocaleString("en-GB", {
+            timeZone: "Asia/Ho_Chi_Minh",
             hour: "2-digit",
             minute: "2-digit",
             second: "2-digit",
           }),
-        })),
+        ].join("\n");
+
+        console.log(
+          `Formatted updatedAt for ID ${text.id}:`,
+          updatedAtFormatted,
+        );
+
+        return {
+          ...text,
+          Batch: `${text.Batch?.index ?? "N/A"}`,
+          Performance: `${(text.Batch?.performance ?? 0).toFixed(1)}`,
+          updatedAtFormatted,
+          User: {
+            ...text.User,
+            role: formatRole(text.User?.role ?? ""),
+          },
+        };
+      });
+
+      return {
+        history: formattedHistory,
         totalCount,
       };
     }),

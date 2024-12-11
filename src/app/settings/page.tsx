@@ -1,9 +1,10 @@
 import { SignedIn } from "@clerk/nextjs";
+import AdminSettings from "../_components/AdminSettings";
 
 const Settings = () => {
   return (
     <SignedIn>
-      <p>#TODO</p>
+      <AdminSettings />
     </SignedIn>
   );
 };

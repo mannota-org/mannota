@@ -165,6 +165,7 @@ const AnnotationDashboard: React.FC = () => {
       });
       toast({
         title: "Success",
+        variant: "success",
         description: "Batch performance updated successfully",
       });
       setUpdatePerformanceShown(false);
@@ -185,6 +186,7 @@ const AnnotationDashboard: React.FC = () => {
       if (!data?.medicalText?.length) {
         toast({
           title: "Annotation Completed",
+          variant: "success",
           description: "All batches have been completed.",
         });
       }
@@ -212,18 +214,16 @@ const AnnotationDashboard: React.FC = () => {
 
   const { medicalText, batch, textLeftToAnnotate, totalTextInBatch } = data;
 
-  // Responsive update to AnnotationDashboard.tsx
-
   return (
     <div className="min-h-screen w-full overflow-hidden">
       <div className="relative flex h-full w-full flex-col items-center justify-center bg-white bg-dot-black/[0.4] dark:bg-black dark:bg-dot-white/[0.4]">
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_10%,black)] dark:bg-black"></div>
-        <h2 className="primary relative z-20 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text pb-12 pt-24 text-center text-5xl font-bold text-transparent sm:text-3xl md:text-4xl">
+        <h2 className="primary relative z-20 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text pb-12 pt-24 text-center text-5xl font-bold text-transparent">
           Annotation Dashboard
         </h2>
       </div>
 
-      <div className="flex flex-col space-y-4 p-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8">
+      <div className="flex flex-col space-y-4 py-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8">
         <Card className="relative z-30 flex-1 py-8">
           <CardContent className="flex h-full flex-col justify-between">
             <div className="space-y-4">
@@ -337,6 +337,24 @@ const AnnotationDashboard: React.FC = () => {
                 Annotate Next Batch
               </Button>
             )}
+          </CardContent>
+        </Card>
+      </div>
+      <div className="flex flex-col space-y-4 py-1 md:flex-row md:space-x-4 md:space-y-0 md:px-24">
+        <Card className="relative z-30 flex-1 py-8">
+          <CardContent className="flex h-full flex-col justify-between">
+            Task Explanation Simplify: Reword the text to make it easier to
+            understand. Translate: Convert English text into Vietnamese
+            accurately. Summarize: Shorten the text while keeping the essential
+            points.
+          </CardContent>
+        </Card>
+
+        <Card className="relative z-30 flex-1 py-8">
+          <CardContent className="flex h-full flex-col justify-between">
+            Annotation Guidelines Click Start to enable text annotating. Pause
+            if needed, then resume the task. When done, click Stop & Submit, a
+            success message will be displayed.
           </CardContent>
         </Card>
       </div>
