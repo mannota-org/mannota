@@ -114,33 +114,52 @@ export const medicalTextRouter = createTRPCRouter({
       return updatedMedicalText;
     }),
 
-  fetchAnnotationHistory: publicProcedure.query(async () => {
-    const history = await db.medicalTextData.findMany({
-      orderBy: { updatedAt: "desc" },
-      include: {
-        Batch: {
-          select: { index: true, performance: true },
-        },
-        User: {
-          select: { name: true, email: true, role: true },
-        },
-      },
-    });
+  fetchAnnotationHistory: publicProcedure
+    .input(
+      z.object({
+        page: z.number().min(1),
+        limit: z.number().min(1).max(100),
+      })
+    )
+    .query(async ({ input }) => {
+      const { page, limit } = input;
+      const offset = (page - 1) * limit;
 
-    return history.map((text) => ({
-      ...text,
-      Batch: `Batch ${text.Batch?.index ?? "N/A"}`, // Only includes batch index
-      Performance: `${(text.Batch?.performance ?? 0).toFixed(1)}`, // New field for performance score
-      updatedAtFormatted: new Date(text.updatedAt).toLocaleString("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      }),
-    }));    
-  }),
+      const [history, totalCount] = await Promise.all([
+        db.medicalTextData.findMany({
+          skip: offset,
+          take: limit,
+          orderBy: { updatedAt: "desc" },
+          include: {
+            Batch: {
+              select: { index: true, performance: true }
+            },
+            User: {
+              select: { name: true, email: true, role: true }
+            },
+          },
+        }),
+        db.medicalTextData.count(),
+      ]);
+
+      return {
+        history: history.map((text) => ({
+          ...text,
+          Batch: `Batch ${text.Batch?.index ?? "N/A"}`,
+          Performance: `${(text.Batch?.performance ?? 0).toFixed(1)}`,
+          updatedAtFormatted: new Date(text.updatedAt).toLocaleString("en-GB", {
+            timeZone: "Asia/Ho_Chi_Minh",
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          }),
+        })),
+        totalCount,
+      };
+    }),
 });
 
 export default medicalTextRouter;

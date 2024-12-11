@@ -17,11 +17,22 @@ import {
 } from "@/components/ui/dialog";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import * as React from "react";
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationPrevious, PaginationNext, PaginationEllipsis } from "@/components/ui/pagination";
 
 const AnnotationHistory: React.FC = () => {
-  const { data: history, isLoading } =
-    api.medicalText.fetchAnnotationHistory.useQuery();
+  const [page, setPage] = React.useState(1);
+  const limit = 10;
+  
+  const { data, isLoading } =
+    api.medicalText.fetchAnnotationHistory.useQuery({
+      page,
+      limit,
+    });
+  
+  const totalPages = data ? Math.ceil(data.totalCount / limit) : 0;
+  // const totalPages = history ? Math.ceil(history.totalCount / limit) : 0;
   const [openDialog, setOpenDialog] = React.useState<string | null>(null); // To track which dialog is open
+
 
   React.useEffect(() => {
     if (history === undefined || history.length === 0) {
@@ -58,7 +69,7 @@ const AnnotationHistory: React.FC = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {history?.map((entry) => (
+            {data?.history.map((entry) => (
               <React.Fragment key={entry.id}>
                 <TableRow
                   onClick={() => setOpenDialog(entry.id)} // Open the dialog for this entry
@@ -147,6 +158,58 @@ const AnnotationHistory: React.FC = () => {
           </TableBody>
         </Table>
       </div>
+      <Pagination className="mt-2 mb-12">
+      <PaginationContent>
+          <PaginationPrevious
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            disabled={page === 1}
+          />
+          {Array.from({ length: totalPages }, (_, index) => 
+          {
+            const pageIndex = index + 1;
+            const isNearCurrentPage = Math.abs(pageIndex - page) <= 2;
+            const isFirstFewPages = pageIndex <= 3;
+            const isLastFewPages = pageIndex > totalPages - 3;
+      
+            if (isNearCurrentPage || isFirstFewPages || isLastFewPages) {
+              return (
+                <PaginationItem key={index}>
+                  <PaginationLink
+                    isActive={page === pageIndex}
+                    onClick={() => setPage(pageIndex)}
+                    disabled={page === pageIndex}
+                  >
+                    {pageIndex}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            }
+      
+            if (pageIndex === 4 && page > 4) {
+              return (
+                <PaginationItem key={index}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
+            }
+
+            if (pageIndex === totalPages - 3 && page < totalPages - 3) {
+              return (
+                <PaginationItem key={index}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
+            }
+      
+            return null;
+          }
+          )}
+          <PaginationNext
+            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={page === totalPages}
+          />
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };
