@@ -33,6 +33,9 @@ const AnnotationHistory: React.FC = () => {
     });
   
   const totalPages = data ? Math.ceil(data.totalCount / limit) : 0;
+  // const totalPages = history ? Math.ceil(history.totalCount / limit) : 0;
+  const [openDialog, setOpenDialog] = React.useState<string | null>(null); // To track which dialog is open
+
 
   React.useEffect(() => {
     if (history === undefined || history.length === 0) {
