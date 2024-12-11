@@ -51,7 +51,7 @@ const AnnotationGuidelines: React.FC<AnnotationGuidelinesProps> = ({
   - **Summarize**: Shorten the text while keeping the essential points.
   `;
 
-  const annotationGuidelines = `
+  const annotationExplanation = `
   - Click "Start" to enable text annotating.
   - Pause if needed, then resume the task.
   - When done, click "Stop & Submit", a success message will be displayed.
@@ -85,7 +85,7 @@ const AnnotationGuidelines: React.FC<AnnotationGuidelinesProps> = ({
 
       <div className="space-y-4">
         <h6 className="text-xl font-semibold text-center">Annotation Guidelines</h6>
-        <ReactMarkdown className="text-sm">{annotationDetails}</ReactMarkdown>
+        <ReactMarkdown className="text-sm">{annotationExplanation}</ReactMarkdown>
 
         <div className="flex justify-end mt-4 pr-4">
           <Dialog open={isModalOpen2} onOpenChange={setIsModalOpen2}>
@@ -98,7 +98,7 @@ const AnnotationGuidelines: React.FC<AnnotationGuidelinesProps> = ({
                 <DialogTitle>More Details</DialogTitle>
               </DialogHeader>
               <DialogDescription>
-                <ReactMarkdown>{annotationGuidelines}</ReactMarkdown>
+                <ReactMarkdown>{annotationDetails}</ReactMarkdown>
               </DialogDescription>
             </DialogContent>
           </Dialog>
