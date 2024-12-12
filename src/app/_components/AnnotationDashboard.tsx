@@ -6,13 +6,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { api } from "@/trpc/react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
 import { Card, CardContent } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import Header from "./Header";
+import Link from "next/link";
 
 const AnnotationDashboard: React.FC = () => {
   const [editableText, setEditableText] = useState("");
@@ -220,7 +221,7 @@ const AnnotationDashboard: React.FC = () => {
       <Header title="Annotation Dashboard" />
 
       <div className="flex flex-col space-y-4 py-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8">
-        <Card className="relative z-30 flex-1 py-8">
+        <Card className="relative z-30 flex-1 pt-8">
           <CardContent className="flex h-full flex-col justify-between">
             <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">
@@ -262,10 +263,21 @@ const AnnotationDashboard: React.FC = () => {
                 </>
               )}
             </div>
+            {/* <div className="my-8 border-t border-gray-300"></div> */}
+            <Card className="mt-8 w-full border-none bg-gray-100 p-4 shadow-none">
+              Task Explanation Simplify: Reword the text to make it easier to
+              understand. Translate: Convert English text into Vietnamese
+              accurately. Summarize: Shorten the text while keeping the
+              essential points.
+              <br></br>
+              <Button className="mt-2" variant="outline" size="sm">
+                View details <ArrowRight />
+              </Button>
+            </Card>
           </CardContent>
         </Card>
 
-        <Card className="relative z-30 flex-1 py-8">
+        <Card className="relative z-30 flex-1 pt-8">
           <CardContent className="flex h-full flex-col justify-between">
             <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">
@@ -323,6 +335,7 @@ const AnnotationDashboard: React.FC = () => {
                 </>
               )}
             </div>
+
             {updatePerformanceShown && (
               <Button onClick={handleUpdatePerformance}>
                 Update Batch Performance
@@ -333,24 +346,17 @@ const AnnotationDashboard: React.FC = () => {
                 Annotate Next Batch
               </Button>
             )}
-          </CardContent>
-        </Card>
-      </div>
-      <div className="flex flex-col space-y-4 py-1 md:flex-row md:space-x-4 md:space-y-0 md:px-8">
-        <Card className="relative z-30 flex-1 py-8">
-          <CardContent className="flex h-full flex-col justify-between">
-            Task Explanation Simplify: Reword the text to make it easier to
-            understand. Translate: Convert English text into Vietnamese
-            accurately. Summarize: Shorten the text while keeping the essential
-            points.
-          </CardContent>
-        </Card>
-
-        <Card className="relative z-30 flex-1 py-8">
-          <CardContent className="flex h-full flex-col justify-between">
-            Annotation Guidelines Click Start to enable text annotating. Pause
-            if needed, then resume the task. When done, click Stop & Submit, a
-            success message will be displayed.
+            {/* <div className="my-8 border-t border-gray-300"></div> */}
+            <Card className="mt-8 w-full border-none bg-gray-100 p-4 shadow-none">
+              Task Explanation Simplify: Reword the text to make it easier to
+              understand. Translate: Convert English text into Vietnamese
+              accurately. Summarize: Shorten the text while keeping the
+              essential points.
+              <br></br>
+              <Button className="mt-2" variant="outline" size="sm">
+                View details <ArrowRight />
+              </Button>
+            </Card>
           </CardContent>
         </Card>
       </div>
