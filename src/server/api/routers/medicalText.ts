@@ -134,6 +134,11 @@ export const medicalTextRouter = createTRPCRouter({
 
       const [history, totalCount] = await Promise.all([
         db.medicalTextData.findMany({
+          where: {
+            NOT: {
+              annotatedText: "",
+            },
+          },
           skip: offset,
           take: limit,
           orderBy: { updatedAt: "desc" },
@@ -146,7 +151,13 @@ export const medicalTextRouter = createTRPCRouter({
             },
           },
         }),
-        db.medicalTextData.count(),
+        db.medicalTextData.count({
+          where: {
+            NOT: {
+              annotatedText: "",
+            },
+          },
+        }),
       ]);
 
       const formattedHistory = history.map((text) => {

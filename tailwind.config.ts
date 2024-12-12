@@ -38,6 +38,7 @@ export default {
           DEFAULT: "#367d53",
           foreground: "#f4f8f6",
           100: "#f4f8f6",
+          600: "#5e9775",
           700: "#4a8a64",
           800: "#367d53",
         },

@@ -16,7 +16,7 @@ import {
   NameType,
   ValueType,
 } from "recharts/types/component/DefaultTooltipContent";
-import Header from "./Header";
+import Header from "./Layout/Header";
 
 type ChartDataPoint = {
   batchIndex: string;
@@ -106,7 +106,7 @@ const PScoreVisualization: React.FC = () => {
                           {data.payload.batchIndex}
                         </div>
                         <div className="text-muted-foreground">
-                          Score: {data.value}
+                          PScore: {data.value}
                         </div>
                         <div className="text-muted-foreground">
                           Updated: {data.payload.updatedAt}
@@ -119,7 +119,7 @@ const PScoreVisualization: React.FC = () => {
                   type="monotone"
                   dataKey="performance"
                   stroke="hsl(142.1 76.2% 36.3%)"
-                  strokeWidth={2}
+                  strokeWidth={2.5}
                   dot={({
                     cx,
                     cy,
@@ -129,7 +129,7 @@ const PScoreVisualization: React.FC = () => {
                     cy: number;
                     payload: ChartDataPoint;
                   }) => {
-                    const r = 25;
+                    const r = 30;
                     return (
                       <GitCommitVertical
                         key={payload.batchIndex}

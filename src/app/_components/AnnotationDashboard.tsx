@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
 import { Card, CardContent } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import Header from "./Header";
+import Header from "./Layout/Header";
 import Link from "next/link";
 
 const AnnotationDashboard: React.FC = () => {
@@ -339,7 +339,7 @@ const AnnotationDashboard: React.FC = () => {
                     </Button>
                     <Badge
                       variant="outline"
-                      className="bg-white-100 text-primary-800 border-primary-300 text-base"
+                      className="bg-white-100 border-primary-300 text-base text-primary-800"
                     >
                       Time: {seconds}s
                     </Badge>

@@ -22,6 +22,8 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import { api } from "@/trpc/react";
 
 const items = [
   {
@@ -53,6 +55,17 @@ export function AppSidebar() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const { user } = useUser();
+  const email = user?.primaryEmailAddress?.emailAddress ?? "";
+  const { data: userData } = api.user.getUserByEmail.useQuery({ email });
+
+  const filteredItems = items.filter((item) => {
+    if (item.url === "/settings") {
+      return userData?.role === "admin";
+    }
+    return true;
+  });
+
   return (
     <div
       className={`relative ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}
@@ -70,7 +83,7 @@ export function AppSidebar() {
                     <UserButton />
                   </div>
                 </Link>
-                {items.map((item) => (
+                {filteredItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <Link href={item.url} className="mb-2">

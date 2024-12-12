@@ -26,7 +26,7 @@ import {
   PaginationNext,
   PaginationEllipsis,
 } from "@/components/ui/pagination";
-import Header from "./Header";
+import Header from "./Layout/Header";
 
 const AnnotationHistory: React.FC = () => {
   const [page, setPage] = React.useState(1);
