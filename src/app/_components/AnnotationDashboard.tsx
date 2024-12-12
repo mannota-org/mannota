@@ -234,37 +234,42 @@ const AnnotationDashboard: React.FC = () => {
                 />
               </div>
               {!updatePerformanceShown && !nextBatchShown && (
-                <>
-                  <div className="flex flex-wrap items-center space-x-2">
+                <div className="space-y-8">
+                  <div className="grid grid-cols-3 gap-2">
                     <Badge
                       variant="outline"
-                      className="bg-primary-100 text-primary-800 border-primary-300 text-base"
+                      className="w-full border-orange-200 bg-yellow-50 text-base text-orange-500"
                     >
-                      {medicalText?.[0]?.task ?? "N/A"}
+                      Task: {medicalText?.[0]?.task ?? "N/A"}
                     </Badge>
                     <Badge
                       variant="outline"
-                      className="bg-secondary-100 text-secondary-800 border-secondary-300 text-base"
+                      className="w-full border-sky-200 bg-sky-50 text-base text-sky-600"
                     >
                       Confidence:{" "}
                       {medicalText?.[0]?.confidence?.toFixed(1) ?? "N/A"}
                     </Badge>
                     <Badge
                       variant="outline"
-                      className="bg-secondary-100 text-secondary-800 border-secondary-300 text-base"
+                      className="w-full border-purple-200 bg-purple-50 text-base text-purple-600"
                     >
-                      Batch {batch?.index ?? "N/A"}
+                      Batch: {batch?.index ?? "N/A"}
                     </Badge>
                   </div>
                   <div>
-                    {textLeftToAnnotate ?? "N/A"} / {totalTextInBatch ?? "N/A"}{" "}
-                    text(s) left to annotate.
+                    <Badge
+                      variant="outline"
+                      className="border-default-200 bg-default-50 text-base font-normal text-gray-700"
+                    >
+                      {textLeftToAnnotate ?? "N/A"} /{" "}
+                      {totalTextInBatch ?? "N/A"} text(s) left to annotate.{" "}
+                    </Badge>
                   </div>
-                </>
+                </div>
               )}
             </div>
             {/* <div className="my-8 border-t border-gray-300"></div> */}
-            <Card className="mt-8 w-full border-none bg-gray-100 p-4 shadow-none">
+            <Card className="mt-12 w-full border-none bg-gray-100 p-4 shadow-none">
               Task Explanation Simplify: Reword the text to make it easier to
               understand. Translate: Convert English text into Vietnamese
               accurately. Summarize: Shorten the text while keeping the
@@ -304,12 +309,17 @@ const AnnotationDashboard: React.FC = () => {
                     />
                   </div>
                   <div className="flex flex-wrap space-x-2">
-                    <Button onClick={startTimer} disabled={isRunning}>
+                    <Button
+                      onClick={startTimer}
+                      disabled={isRunning}
+                      className="bg-primary-800"
+                    >
                       Start
                     </Button>
                     <Button
                       onClick={isPaused ? resumeTimer : pauseTimer}
                       disabled={!isRunning}
+                      className="bg-primary-800"
                     >
                       {isPaused ? "Resume" : "Pause"}
                     </Button>
@@ -319,6 +329,7 @@ const AnnotationDashboard: React.FC = () => {
                         void handleSubmit();
                       }}
                       disabled={!isRunning || isSubmitting}
+                      className="bg-primary-800"
                     >
                       {isSubmitting && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -327,7 +338,7 @@ const AnnotationDashboard: React.FC = () => {
                     </Button>
                     <Badge
                       variant="outline"
-                      className="bg-primary-100 text-primary-800 border-primary-300 text-base"
+                      className="bg-white-100 text-primary-800 border-primary-300 text-base"
                     >
                       Time: {seconds}s
                     </Badge>
@@ -347,7 +358,7 @@ const AnnotationDashboard: React.FC = () => {
               </Button>
             )}
             {/* <div className="my-8 border-t border-gray-300"></div> */}
-            <Card className="mt-8 w-full border-none bg-gray-100 p-4 shadow-none">
+            <Card className="mt-12 w-full border-none bg-gray-100 p-4 shadow-none">
               Task Explanation Simplify: Reword the text to make it easier to
               understand. Translate: Convert English text into Vietnamese
               accurately. Summarize: Shorten the text while keeping the
