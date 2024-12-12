@@ -11,19 +11,19 @@ generator client {
 }
 
 model MedicalTextData {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   originalText   String
-  annotatedText  String    @default("")
+  annotatedText  String   @default("")
   task           String
-  confidence     Float     @default(0)
+  confidence     Float    @default(0)
   annotateReason String?
-  annotateTime   Int       @default(0)
-  User           User?     @relation(fields: [userId], references: [id])
-  userId         String?   @db.ObjectId
-  batchId        String?   @db.ObjectId
-  Batch          Batch?    @relation(fields: [batchId], references: [id])
+  annotateTime   Int      @default(0)
+  User           User?    @relation(fields: [userId], references: [id])
+  userId         String?  @db.ObjectId
+  batchId        String?  @db.ObjectId
+  Batch          Batch?   @relation(fields: [batchId], references: [id])
 }
 
 model User {
@@ -31,8 +31,8 @@ model User {
   email        String            @unique
   name         String
   role         String
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
   medicalTexts MedicalTextData[]
 }
 
@@ -50,6 +50,16 @@ model Batch {
   confidence   Float             @default(0)
   performance  Float             @default(0)
   medicalTexts MedicalTextData[]
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+model Guidelines {
+  id                       String   @id @default(auto()) @map("_id") @db.ObjectId
+  taskGuidelineShort       String
+  taskGuidelineLong        String
+  annotationGuidelineShort String
+  annotationGuidelineLong  String
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
 }

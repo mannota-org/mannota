@@ -1,5 +1,13 @@
 "use client";
-import { Calendar, History, Home, Inbox, Search, Settings, BarChart } from "lucide-react";
+import {
+  Calendar,
+  History,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+  BarChart,
+} from "lucide-react";
 import React, { useState } from "react";
 import {
   Sidebar,
@@ -14,6 +22,8 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
+import { api } from "@/trpc/react";
 
 const items = [
   {
@@ -27,14 +37,14 @@ const items = [
     icon: History,
   },
   {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
-  {
     title: "Analysis",
     url: "/analysis",
     icon: BarChart,
+  },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: Settings,
   },
 ];
 
@@ -45,6 +55,17 @@ export function AppSidebar() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const { user } = useUser();
+  const email = user?.primaryEmailAddress?.emailAddress ?? "";
+  const { data: userData } = api.user.getUserByEmail.useQuery({ email });
+
+  const filteredItems = items.filter((item) => {
+    if (item.url === "/settings") {
+      return userData?.role === "admin";
+    }
+    return true;
+  });
+
   return (
     <div
       className={`relative ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}
@@ -54,13 +75,15 @@ export function AppSidebar() {
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                <div className="mx-2 mt-8 mb-6 flex flex-row items-center gap-2">
-                  <Image src="/logo.png" alt="logo" width={26} height={26} />
-                  <span className="text-xl font-bold">Mannota</span>
-                  <div className="flex-grow" />
-                  <UserButton />
-                </div>
-                {items.map((item) => (
+                <Link href="/" className="mb-2">
+                  <div className="mx-2 mb-6 mt-8 flex flex-row items-center gap-2">
+                    <Image src="/logo.png" alt="logo" width={26} height={26} />
+                    <span className="text-xl font-bold">Mannota</span>
+                    <div className="flex-grow" />
+                    <UserButton />
+                  </div>
+                </Link>
+                {filteredItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <Link href={item.url} className="mb-2">

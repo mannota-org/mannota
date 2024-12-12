@@ -4,6 +4,7 @@ import { settings } from ".eslintrc.cjs";
 import settingsRouter from "@/server/api/routers/settings";
 import medicalTextRouter from "@/server/api/routers/medicalText";
 import batchRouter from "@/server/api/routers/batch";
+import guidelineRouter from "@/server/api/routers/guideline";
 
 /**
  * This is the primary router for your server.
@@ -14,7 +15,8 @@ export const appRouter = createTRPCRouter({
   user: userRouter,
   settings: settingsRouter,
   medicalText: medicalTextRouter,
-  batch: batchRouter
+  batch: batchRouter,
+  guideline: guidelineRouter,
 });
 
 // export type definition of API

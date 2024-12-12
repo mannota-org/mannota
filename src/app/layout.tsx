@@ -2,11 +2,11 @@ import "@/styles/globals.css";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "@/trpc/react";
-import NavigationBar from "./_components/NavigationBar";
-import { LandingPage } from "./_components/LandingPage";
+import NavigationBar from "./_components/Layout/NavigationBar";
+import { LandingPage } from "./_components/Layout/LandingPage";
 import { Toaster } from "@/components/ui/toaster";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/app/_components/AppSidebar";
+import { AppSidebar } from "@/app/_components/Layout/AppSidebar";
 
 // Import Inter font from Google Fonts
 import { Inter } from "next/font/google";

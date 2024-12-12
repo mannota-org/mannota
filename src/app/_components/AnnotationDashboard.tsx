@@ -6,12 +6,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { api } from "@/trpc/react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
 import { Card, CardContent } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import Header from "./Layout/Header";
+import Link from "next/link";
 
 const AnnotationDashboard: React.FC = () => {
   const [editableText, setEditableText] = useState("");
@@ -165,6 +167,7 @@ const AnnotationDashboard: React.FC = () => {
       });
       toast({
         title: "Success",
+        variant: "success",
         description: "Batch performance updated successfully",
       });
       setUpdatePerformanceShown(false);
@@ -185,6 +188,7 @@ const AnnotationDashboard: React.FC = () => {
       if (!data?.medicalText?.length) {
         toast({
           title: "Annotation Completed",
+          variant: "success",
           description: "All batches have been completed.",
         });
       }
@@ -212,19 +216,12 @@ const AnnotationDashboard: React.FC = () => {
 
   const { medicalText, batch, textLeftToAnnotate, totalTextInBatch } = data;
 
-  // Responsive update to AnnotationDashboard.tsx
-
   return (
     <div className="min-h-screen w-full overflow-hidden">
-      <div className="relative flex h-full w-full flex-col items-center justify-center bg-white bg-dot-black/[0.4] dark:bg-black dark:bg-dot-white/[0.4]">
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_10%,black)] dark:bg-black"></div>
-        <h2 className="primary relative z-20 bg-gradient-to-b from-neutral-400 to-neutral-700 bg-clip-text pb-12 pt-24 text-center text-5xl font-bold text-transparent sm:text-3xl md:text-4xl">
-          Annotation Dashboard
-        </h2>
-      </div>
+      <Header title="Annotation Dashboard" />
 
-      <div className="flex flex-col space-y-4 p-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8">
-        <Card className="relative z-30 flex-1 py-8">
+      <div className="flex flex-col space-y-4 py-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8">
+        <Card className="relative z-30 flex-1 pt-8">
           <CardContent className="flex h-full flex-col justify-between">
             <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">
@@ -237,39 +234,56 @@ const AnnotationDashboard: React.FC = () => {
                 />
               </div>
               {!updatePerformanceShown && !nextBatchShown && (
-                <>
-                  <div className="flex flex-wrap items-center space-x-2">
+                <div className="space-y-8">
+                  <div className="space-y-2">
                     <Badge
                       variant="outline"
-                      className="bg-primary-100 text-primary-800 border-primary-300 text-base"
+                      className="border-orange-200 bg-yellow-50 text-sm text-orange-500"
                     >
-                      {medicalText?.[0]?.task ?? "N/A"}
+                      Task: {medicalText?.[0]?.task ?? "N/A"}
                     </Badge>
+                    <br />
                     <Badge
                       variant="outline"
-                      className="bg-secondary-100 text-secondary-800 border-secondary-300 text-base"
+                      className="border-sky-200 bg-sky-50 text-sm text-sky-600"
                     >
                       Confidence:{" "}
                       {medicalText?.[0]?.confidence?.toFixed(1) ?? "N/A"}
                     </Badge>
+                    <br />
                     <Badge
                       variant="outline"
-                      className="bg-secondary-100 text-secondary-800 border-secondary-300 text-base"
+                      className="border-purple-200 bg-purple-50 text-sm text-purple-600"
                     >
-                      Batch {batch?.index ?? "N/A"}
+                      Batch: {batch?.index ?? "N/A"}
+                    </Badge>
+                    <br />
+                    <Badge
+                      variant="outline"
+                      className="border-default-200 bg-default-50 text-sm font-normal text-gray-700"
+                    >
+                      {textLeftToAnnotate ?? "N/A"} /{" "}
+                      {totalTextInBatch ?? "N/A"} text(s) left to annotate.{" "}
                     </Badge>
                   </div>
-                  <div>
-                    {textLeftToAnnotate ?? "N/A"} / {totalTextInBatch ?? "N/A"}{" "}
-                    text(s) left to annotate.
-                  </div>
-                </>
+                </div>
               )}
             </div>
+            {/* <div className="my-8 border-t border-gray-300"></div> */}
+            <Card className="mt-12 w-full border-none bg-gray-100 p-4 shadow-none">
+              Task Explanation Simplify: Reword the text to make it easier to
+              understand. Translate: Convert English text into Vietnamese
+              accurately. Summarize: Shorten the text while keeping the
+              essential points.
+              <br></br>
+              <Button className="mt-2" variant="outline" size="sm">
+                View details <ArrowRight />
+              </Button>
+            </Card>
           </CardContent>
         </Card>
 
-        <Card className="relative z-30 flex-1 py-8">
+        <Card className="relative z-30 flex-1 pt-8">
           <CardContent className="flex h-full flex-col justify-between">
             <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">
@@ -296,12 +310,17 @@ const AnnotationDashboard: React.FC = () => {
                     />
                   </div>
                   <div className="flex flex-wrap space-x-2">
-                    <Button onClick={startTimer} disabled={isRunning}>
+                    <Button
+                      onClick={startTimer}
+                      disabled={isRunning}
+                      className="bg-primary-800"
+                    >
                       Start
                     </Button>
                     <Button
                       onClick={isPaused ? resumeTimer : pauseTimer}
                       disabled={!isRunning}
+                      className="bg-primary-800"
                     >
                       {isPaused ? "Resume" : "Pause"}
                     </Button>
@@ -311,6 +330,7 @@ const AnnotationDashboard: React.FC = () => {
                         void handleSubmit();
                       }}
                       disabled={!isRunning || isSubmitting}
+                      className="bg-primary-800"
                     >
                       {isSubmitting && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -319,7 +339,7 @@ const AnnotationDashboard: React.FC = () => {
                     </Button>
                     <Badge
                       variant="outline"
-                      className="bg-primary-100 text-primary-800 border-primary-300 text-base"
+                      className="bg-white-100 border-primary-300 text-base text-primary-800"
                     >
                       Time: {seconds}s
                     </Badge>
@@ -327,6 +347,7 @@ const AnnotationDashboard: React.FC = () => {
                 </>
               )}
             </div>
+
             {updatePerformanceShown && (
               <Button onClick={handleUpdatePerformance}>
                 Update Batch Performance
@@ -337,6 +358,17 @@ const AnnotationDashboard: React.FC = () => {
                 Annotate Next Batch
               </Button>
             )}
+            {/* <div className="my-8 border-t border-gray-300"></div> */}
+            <Card className="mt-12 w-full border-none bg-gray-100 p-4 shadow-none">
+              Task Explanation Simplify: Reword the text to make it easier to
+              understand. Translate: Convert English text into Vietnamese
+              accurately. Summarize: Shorten the text while keeping the
+              essential points.
+              <br></br>
+              <Button className="mt-2" variant="outline" size="sm">
+                View details <ArrowRight />
+              </Button>
+            </Card>
           </CardContent>
         </Card>
       </div>

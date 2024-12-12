@@ -29,16 +29,35 @@ export const userRouter = createTRPCRouter({
       return newUser;
     }),
 
-  getUserByEmail: publicProcedure
-    .input(z.object({ email: z.string().email() }))
-    .query(async ({ input }) => {
-      const { email } = input;
-      const user = await db.user.findUnique({
-        where: { email },
-        select: { id: true, email: true, name: true, role: true },
-      });
-      return user;
+getUserByEmail: publicProcedure
+  .input(
+    z.object({
+      email: z.string().email(),
     }),
+  )
+  .query(async ({ input }) => {
+    const { email } = input;
+    const user = await db.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    const isAdmin = user.role?.toLowerCase() === "admin";
+    
+    return {
+      ...user,
+      isAdmin,
+    };
+  }),
 });
 
 export default userRouter;
