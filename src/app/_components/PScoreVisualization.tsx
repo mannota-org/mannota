@@ -52,7 +52,7 @@ const PScoreVisualization: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center">
+      <div className="flex min-h-[100dvh] w-full items-center justify-center">
         <LoadingSpinner />
       </div>
     );

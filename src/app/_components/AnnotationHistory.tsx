@@ -66,7 +66,7 @@ const AnnotationHistory: React.FC = () => {
                 <TableHead className="w-1/3">Original Text</TableHead>
                 <TableHead className="w-1/3">Annotated Text</TableHead>
                 <TableHead className="text-center">Batch</TableHead>
-                <TableHead className="text-center">PSCore</TableHead>
+                <TableHead className="text-center">PScore</TableHead>
                 <TableHead className="text-center">Annotator</TableHead>
                 <TableHead className="w-1/10 text-center">Updated At</TableHead>
               </TableRow>
