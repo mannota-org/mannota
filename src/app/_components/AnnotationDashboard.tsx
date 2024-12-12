@@ -235,31 +235,32 @@ const AnnotationDashboard: React.FC = () => {
               </div>
               {!updatePerformanceShown && !nextBatchShown && (
                 <div className="space-y-8">
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="space-y-2">
                     <Badge
                       variant="outline"
-                      className="w-full border-orange-200 bg-yellow-50 text-base text-orange-500"
+                      className="border-orange-200 bg-yellow-50 text-sm text-orange-500"
                     >
                       Task: {medicalText?.[0]?.task ?? "N/A"}
                     </Badge>
+                    <br />
                     <Badge
                       variant="outline"
-                      className="w-full border-sky-200 bg-sky-50 text-base text-sky-600"
+                      className="border-sky-200 bg-sky-50 text-sm text-sky-600"
                     >
                       Confidence:{" "}
                       {medicalText?.[0]?.confidence?.toFixed(1) ?? "N/A"}
                     </Badge>
+                    <br />
                     <Badge
                       variant="outline"
-                      className="w-full border-purple-200 bg-purple-50 text-base text-purple-600"
+                      className="border-purple-200 bg-purple-50 text-sm text-purple-600"
                     >
                       Batch: {batch?.index ?? "N/A"}
                     </Badge>
-                  </div>
-                  <div>
+                    <br />
                     <Badge
                       variant="outline"
-                      className="border-default-200 bg-default-50 text-base font-normal text-gray-700"
+                      className="border-default-200 bg-default-50 text-sm font-normal text-gray-700"
                     >
                       {textLeftToAnnotate ?? "N/A"} /{" "}
                       {totalTextInBatch ?? "N/A"} text(s) left to annotate.{" "}
