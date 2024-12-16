@@ -15,6 +15,7 @@ import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import Header from "./Layout/Header";
 import Link from "next/link";
 import AnnotationGuideline from "./AnnotationGuideline";
+import { formatTime } from "@/lib/helpers";
 
 const AnnotationDashboard: React.FC = () => {
   const [editableText, setEditableText] = useState("");
@@ -329,8 +330,8 @@ const AnnotationDashboard: React.FC = () => {
                       variant="outline"
                       className="flex-1 border-green-600 bg-green-50 text-sm text-primary-800"
                     >
-                      <Clock className="h-4 w-4" />
-                      {":"} {seconds}s
+                      <Clock className="h-4 w-4 mr-2" />
+                      {formatTime(seconds)}
                     </Badge>
                     <Badge
                       variant="outline"

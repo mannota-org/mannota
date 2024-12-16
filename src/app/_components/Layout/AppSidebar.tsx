@@ -55,17 +55,6 @@ export function AppSidebar() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const { user } = useUser();
-  const email = user?.primaryEmailAddress?.emailAddress ?? "";
-  const { data: userData } = api.user.getUserByEmail.useQuery({ email });
-
-  const filteredItems = items.filter((item) => {
-    if (item.url === "/settings") {
-      return userData?.role === "admin";
-    }
-    return true;
-  });
-
   return (
     <div
       className={`relative ${isSidebarOpen ? "sidebar-open" : "sidebar-closed"}`}
@@ -83,7 +72,7 @@ export function AppSidebar() {
                     <UserButton />
                   </div>
                 </Link>
-                {filteredItems.map((item) => (
+                {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <Link href={item.url} className="mb-2">
