@@ -55,11 +55,9 @@ model Batch {
 }
 
 model Guidelines {
-  id                       String   @id @default(auto()) @map("_id") @db.ObjectId
-  taskGuidelineShort       String
-  taskGuidelineLong        String
-  annotationGuidelineShort String
-  annotationGuidelineLong  String
-  createdAt                DateTime @default(now())
-  updatedAt                DateTime @updatedAt
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  shortGuideline String
+  longGuideline  String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
