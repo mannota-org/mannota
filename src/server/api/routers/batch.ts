@@ -3,7 +3,7 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { db } from "@/server/db";
 
 export const batchRouter = createTRPCRouter({
-  fetchBatchPerformances: publicProcedure.query(async () => {
+  fetchBatchInfo: publicProcedure.query(async () => {
     const batches = await db.batch.findMany({
       orderBy: {
         index: "asc",
@@ -12,6 +12,7 @@ export const batchRouter = createTRPCRouter({
         id: true,
         index: true, // batch number
         performance: true,
+        confidence: true,
         updatedAt: true,
       },
     });

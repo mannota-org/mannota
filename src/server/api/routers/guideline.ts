@@ -5,10 +5,8 @@ export const guidelineRouter = createTRPCRouter({
   fetchGuidelines: publicProcedure.query(async () => {
     const guidelines = await db.guidelines.findMany({
       select: {
-        taskGuidelineShort: true,
-        taskGuidelineLong: true,
-        annotationGuidelineShort: true,
-        annotationGuidelineLong: true,
+        shortGuideline: true,
+        longGuideline: true,
         updatedAt: true,
       },
     });

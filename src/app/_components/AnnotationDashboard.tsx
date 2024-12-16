@@ -6,14 +6,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Clock, Loader2 } from "lucide-react";
 import { api } from "@/trpc/react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import Header from "./Layout/Header";
 import Link from "next/link";
+import AnnotationGuideline from "./AnnotationGuideline";
+import { formatTime } from "@/lib/helpers";
 
 const AnnotationDashboard: React.FC = () => {
   const [editableText, setEditableText] = useState("");
@@ -37,6 +39,8 @@ const AnnotationDashboard: React.FC = () => {
     isError,
     refetch: refetchMedicalText,
   } = api.medicalText.fetchMedicalText.useQuery();
+
+  const settingsData = api.settings.getSettings.useQuery();
 
   const updateMedicalTextMutation =
     api.medicalText.updateMedicalText.useMutation({
@@ -220,79 +224,65 @@ const AnnotationDashboard: React.FC = () => {
     <div className="min-h-screen w-full overflow-hidden">
       <Header title="Annotation Dashboard" />
 
-      <div className="flex flex-col space-y-4 py-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8">
+      <div className="mb-12 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:px-36">
         <Card className="relative z-30 flex-1 pt-8">
-          <CardContent className="flex h-full flex-col justify-between">
+          <CardContent className="flex flex-col justify-between">
             <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">
                 <Label>Sample Text</Label>
                 <Textarea
                   value={medicalText?.[0]?.originalText ?? "N/A"}
                   readOnly
-                  className="resize-none bg-gray-100 text-gray-700"
+                  className="resize-none bg-gray-50 text-gray-800"
                   disabled
                 />
-              </div>
-              {!updatePerformanceShown && !nextBatchShown && (
-                <div className="space-y-8">
-                  <div className="space-y-2">
-                    <Badge
-                      variant="outline"
-                      className="border-orange-200 bg-yellow-50 text-sm text-orange-500"
-                    >
-                      Task: {medicalText?.[0]?.task ?? "N/A"}
-                    </Badge>
-                    <br />
-                    <Badge
-                      variant="outline"
-                      className="border-sky-200 bg-sky-50 text-sm text-sky-600"
-                    >
-                      Confidence:{" "}
-                      {medicalText?.[0]?.confidence?.toFixed(1) ?? "N/A"}
-                    </Badge>
-                    <br />
-                    <Badge
-                      variant="outline"
-                      className="border-purple-200 bg-purple-50 text-sm text-purple-600"
-                    >
-                      Batch: {batch?.index ?? "N/A"}
-                    </Badge>
-                    <br />
-                    <Badge
-                      variant="outline"
-                      className="border-default-200 bg-default-50 text-sm font-normal text-gray-700"
-                    >
-                      {textLeftToAnnotate ?? "N/A"} /{" "}
-                      {totalTextInBatch ?? "N/A"} text(s) left to annotate.{" "}
-                    </Badge>
+                {!updatePerformanceShown && !nextBatchShown && (
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="col-span-3 flex flex-row space-x-2">
+                      <Badge
+                        variant="outline"
+                        className="flex-1 border-orange-200 bg-yellow-50 text-sm text-orange-500"
+                      >
+                        Task: {medicalText?.[0]?.task ?? "N/A"}
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="flex-1 border-red-200 bg-red-50 text-sm text-red-500"
+                      >
+                        CScore:{" "}
+                        {medicalText?.[0]?.confidence?.toFixed(1) ?? "N/A"}{" "}
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="flex-1 border-purple-200 bg-purple-50 text-sm text-purple-600"
+                      >
+                        Batch: {batch?.index ?? "N/A"}
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="flex-1 border-pink-200 bg-pink-50 text-sm text-pink-600"
+                      >
+                        Threshold:{" "}
+                        {settingsData?.data?.confidenceThreshold?.toFixed(1) ??
+                          "N/A"}
+                      </Badge>
+                      <Badge
+                        variant="outline"
+                        className="flex-1 border-blue-200 bg-blue-50 text-sm text-blue-600"
+                      >
+                        DPB: {settingsData?.data?.dataPerBatch ?? "N/A"}{" "}
+                      </Badge>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
-            {/* <div className="my-8 border-t border-gray-300"></div> */}
-            <Card className="mt-12 w-full border-none bg-gray-100 p-4 shadow-none">
-              Task Explanation Simplify: Reword the text to make it easier to
-              understand. Translate: Convert English text into Vietnamese
-              accurately. Summarize: Shorten the text while keeping the
-              essential points.
-              <br></br>
-              <Button className="mt-2" variant="outline" size="sm">
-                View details <ArrowRight />
-              </Button>
-            </Card>
-          </CardContent>
-        </Card>
+                )}
+              </div>
 
-        <Card className="relative z-30 flex-1 pt-8">
-          <CardContent className="flex h-full flex-col justify-between">
-            <div className="space-y-4">
               <div className="grid w-full items-center gap-1.5">
                 <Label htmlFor="annotate-text">Annotate Text</Label>
                 <Textarea
                   id="annotate-text"
                   value={editableText || ""}
                   onChange={(e) => setEditableText(e.target.value)}
-                  className="mb-2"
                   disabled={!isRunning || isPaused}
                 />
               </div>
@@ -305,22 +295,21 @@ const AnnotationDashboard: React.FC = () => {
                       value={annotateReason || ""}
                       onChange={(e) => setAnnotateReason(e.target.value)}
                       placeholder="Give your reason for annotating"
-                      className="mb-2"
-                      disabled={!isRunning || isSubmitting}
+                      disabled={!isRunning || isPaused || isSubmitting}
                     />
                   </div>
                   <div className="flex flex-wrap space-x-2">
                     <Button
                       onClick={startTimer}
                       disabled={isRunning}
-                      className="bg-primary-800"
+                      className="flex-1 bg-primary-800"
                     >
                       Start
                     </Button>
                     <Button
                       onClick={isPaused ? resumeTimer : pauseTimer}
                       disabled={!isRunning}
-                      className="bg-primary-800"
+                      className="flex-1 bg-primary-800"
                     >
                       {isPaused ? "Resume" : "Pause"}
                     </Button>
@@ -330,7 +319,7 @@ const AnnotationDashboard: React.FC = () => {
                         void handleSubmit();
                       }}
                       disabled={!isRunning || isSubmitting}
-                      className="bg-primary-800"
+                      className="flex-1 bg-primary-800"
                     >
                       {isSubmitting && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -339,9 +328,19 @@ const AnnotationDashboard: React.FC = () => {
                     </Button>
                     <Badge
                       variant="outline"
-                      className="bg-white-100 border-primary-300 text-base text-primary-800"
+                      className="flex-1 border-green-600 bg-green-50 text-sm text-primary-800"
                     >
-                      Time: {seconds}s
+                      <Clock className="h-4 w-4 mr-2" />
+                      {formatTime(seconds)}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="border-default-200 bg-default-50 flex-1 text-sm font-normal text-gray-700"
+                    >
+                      <span className="font-bold">
+                        {textLeftToAnnotate ?? "N/A"}
+                      </span>
+                      /{totalTextInBatch ?? "N/A"} text(s) left
                     </Badge>
                   </div>
                 </>
@@ -358,18 +357,10 @@ const AnnotationDashboard: React.FC = () => {
                 Annotate Next Batch
               </Button>
             )}
-            {/* <div className="my-8 border-t border-gray-300"></div> */}
-            <Card className="mt-12 w-full border-none bg-gray-100 p-4 shadow-none">
-              Task Explanation Simplify: Reword the text to make it easier to
-              understand. Translate: Convert English text into Vietnamese
-              accurately. Summarize: Shorten the text while keeping the
-              essential points.
-              <br></br>
-              <Button className="mt-2" variant="outline" size="sm">
-                View details <ArrowRight />
-              </Button>
-            </Card>
           </CardContent>
+          <CardFooter className="p-0">
+            <AnnotationGuideline />
+          </CardFooter>
         </Card>
       </div>
     </div>
