@@ -306,7 +306,7 @@ const AnnotationDashboard: React.FC = () => {
                       onChange={(e) => setAnnotateReason(e.target.value)}
                       placeholder="Give your reason for annotating"
                       className="mb-2"
-                      disabled={!isRunning || isSubmitting}
+                      disabled={!isRunning || isPaused || isSubmitting}
                     />
                   </div>
                   <div className="flex flex-wrap space-x-2">
