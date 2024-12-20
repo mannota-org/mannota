@@ -224,7 +224,7 @@ const AnnotationDashboard: React.FC = () => {
     <div className="min-h-screen w-full overflow-hidden">
       <Header title="Annotation Dashboard" />
 
-      <div className="mb-12 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:px-36">
+      <div className="mb-12 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8 lg:px-52">
         <Card className="relative z-30 flex-1 pt-8">
           <CardContent className="flex flex-col justify-between">
             <div className="space-y-4">
@@ -237,42 +237,40 @@ const AnnotationDashboard: React.FC = () => {
                   disabled
                 />
                 {!updatePerformanceShown && !nextBatchShown && (
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="col-span-3 flex flex-row space-x-2">
-                      <Badge
-                        variant="outline"
-                        className="flex-1 border-orange-200 bg-yellow-50 text-sm text-orange-500"
-                      >
-                        Task: {medicalText?.[0]?.task ?? "N/A"}
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="flex-1 border-red-200 bg-red-50 text-sm text-red-500"
-                      >
-                        CScore:{" "}
-                        {medicalText?.[0]?.confidence?.toFixed(1) ?? "N/A"}{" "}
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="flex-1 border-purple-200 bg-purple-50 text-sm text-purple-600"
-                      >
-                        Batch: {batch?.index ?? "N/A"}
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="flex-1 border-pink-200 bg-pink-50 text-sm text-pink-600"
-                      >
-                        Threshold:{" "}
-                        {settingsData?.data?.confidenceThreshold?.toFixed(1) ??
-                          "N/A"}
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className="flex-1 border-blue-200 bg-blue-50 text-sm text-blue-600"
-                      >
-                        DPB: {settingsData?.data?.dataPerBatch ?? "N/A"}{" "}
-                      </Badge>
-                    </div>
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-1    lg:grid-cols-5">
+                    <Badge
+                      variant="outline"
+                      className="border-orange-200 bg-yellow-50 text-sm text-orange-500"
+                    >
+                      Task: {medicalText?.[0]?.task ?? "N/A"}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="border-red-200 bg-red-50 text-sm text-red-500"
+                    >
+                      CScore:{" "}
+                      {medicalText?.[0]?.confidence?.toFixed(1) ?? "N/A"}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="border-purple-200 bg-purple-50 text-sm text-purple-600"
+                    >
+                      Batch: {batch?.index ?? "N/A"}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="border-pink-200 bg-pink-50 text-sm text-pink-600"
+                    >
+                      Threshold:{" "}
+                      {settingsData?.data?.confidenceThreshold?.toFixed(1) ??
+                        "N/A"}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="border-blue-200 bg-blue-50 text-sm text-blue-600"
+                    >
+                      DPB: {settingsData?.data?.dataPerBatch ?? "N/A"}
+                    </Badge>
                   </div>
                 )}
               </div>
@@ -298,7 +296,7 @@ const AnnotationDashboard: React.FC = () => {
                       disabled={!isRunning || isPaused || isSubmitting}
                     />
                   </div>
-                  <div className="flex flex-wrap space-x-2">
+                  <div className="flex grid grid-cols-1 flex-wrap gap-2 sm:grid-cols-1 lg:grid-cols-5">
                     <Button
                       onClick={startTimer}
                       disabled={isRunning}
@@ -330,7 +328,7 @@ const AnnotationDashboard: React.FC = () => {
                       variant="outline"
                       className="flex-1 border-green-600 bg-green-50 text-sm text-primary-800"
                     >
-                      <Clock className="h-4 w-4 mr-2" />
+                      <Clock className="mr-2 h-4 w-4" />
                       {formatTime(seconds)}
                     </Badge>
                     <Badge

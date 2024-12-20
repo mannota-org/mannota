@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/nextjs";
 import { type Metadata } from "next";
 import { TRPCReactProvider } from "@/trpc/react";
-import NavigationBar from "./_components/Layout/NavigationBar";
 import { LandingPage } from "./_components/Layout/LandingPage";
 import { Toaster } from "@/components/ui/toaster";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -45,7 +44,6 @@ export default function RootLayout({
           </SignedIn>
           <SignedOut>
             <div className="flex h-screen w-full flex-col">
-              <NavigationBar isSignedIn={false} />
               <LandingPage />
             </div>
           </SignedOut>
