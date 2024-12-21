@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { ArrowRight, Clock, Loader2 } from "lucide-react";
+import { ArrowRight, Clock, Loader2, Pause, Play, Send } from "lucide-react";
 import { api } from "@/trpc/react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
@@ -120,6 +120,16 @@ const AnnotationDashboard: React.FC = () => {
   const stopTimer = () => {
     setIsRunning(false);
     setIsPaused(false);
+  };
+
+  const handleStartPauseResume = () => {
+    if (!isRunning) {
+      startTimer();
+    } else if (isPaused) {
+      resumeTimer();
+    } else {
+      pauseTimer();
+    }
   };
 
   const handleSubmit = async () => {
@@ -237,29 +247,29 @@ const AnnotationDashboard: React.FC = () => {
                   disabled
                 />
                 {!updatePerformanceShown && !nextBatchShown && (
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-1    lg:grid-cols-5">
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-1 lg:grid-cols-5">
                     <Badge
                       variant="outline"
-                      className="border-orange-200 bg-yellow-50 text-sm text-orange-500"
+                      className="rounded-full border-orange-200 bg-yellow-50 text-sm text-orange-500"
                     >
                       Task: {medicalText?.[0]?.task ?? "N/A"}
                     </Badge>
                     <Badge
                       variant="outline"
-                      className="border-red-200 bg-red-50 text-sm text-red-500"
+                      className="rounded-full border-red-200 bg-red-50 text-sm text-red-500"
                     >
                       CScore:{" "}
                       {medicalText?.[0]?.confidence?.toFixed(1) ?? "N/A"}
                     </Badge>
                     <Badge
                       variant="outline"
-                      className="border-purple-200 bg-purple-50 text-sm text-purple-600"
+                      className="rounded-full border-purple-200 bg-purple-50 text-sm text-purple-600"
                     >
                       Batch: {batch?.index ?? "N/A"}
                     </Badge>
                     <Badge
                       variant="outline"
-                      className="border-pink-200 bg-pink-50 text-sm text-pink-600"
+                      className="rounded-full border-pink-200 bg-pink-50 text-sm text-pink-600"
                     >
                       Threshold:{" "}
                       {settingsData?.data?.confidenceThreshold?.toFixed(1) ??
@@ -267,7 +277,7 @@ const AnnotationDashboard: React.FC = () => {
                     </Badge>
                     <Badge
                       variant="outline"
-                      className="border-blue-200 bg-blue-50 text-sm text-blue-600"
+                      className="rounded-full border-blue-200 bg-blue-50 text-sm text-blue-600"
                     >
                       DPB: {settingsData?.data?.dataPerBatch ?? "N/A"}
                     </Badge>
@@ -298,18 +308,11 @@ const AnnotationDashboard: React.FC = () => {
                   </div>
                   <div className="flex grid grid-cols-1 flex-wrap gap-2 sm:grid-cols-1 lg:grid-cols-5">
                     <Button
-                      onClick={startTimer}
-                      disabled={isRunning}
+                      onClick={handleStartPauseResume}
+                      disabled={isSubmitting}
                       className="flex-1 bg-primary-800"
                     >
-                      Start
-                    </Button>
-                    <Button
-                      onClick={isPaused ? resumeTimer : pauseTimer}
-                      disabled={!isRunning}
-                      className="flex-1 bg-primary-800"
-                    >
-                      {isPaused ? "Resume" : "Pause"}
+                      {!isRunning ? <Play /> : isPaused ? <Play /> : <Pause />}
                     </Button>
                     <Button
                       onClick={() => {
@@ -322,7 +325,7 @@ const AnnotationDashboard: React.FC = () => {
                       {isSubmitting && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       )}
-                      Stop & Submit
+                      <Send />
                     </Button>
                     <Badge
                       variant="outline"

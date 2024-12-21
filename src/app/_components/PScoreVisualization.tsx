@@ -32,8 +32,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const PScoreVisualization: React.FC = () => {
-  const { data: batches, isLoading } =
-    api.batch.fetchBatchInfo.useQuery();
+  const { data: batches, isLoading } = api.batch.fetchBatchInfo.useQuery();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
