@@ -86,6 +86,16 @@ export const medicalTextRouter = createTRPCRouter({
     };
   }),
 
+  checkTextConfidence: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      const text = await db.medicalTextData.findUnique({
+        where: { id: input.id },
+        select: { confidence: true },
+      });
+      return { confidence: text?.confidence ?? 0 };
+    }),
+
   updateMedicalText: publicProcedure
     .input(
       z.object({
@@ -98,23 +108,24 @@ export const medicalTextRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input }) => {
-      const {
-        id,
-        annotatedText,
-        confidence,
-        annotateReason,
-        annotateTime,
-        userId,
-      } = input;
+      // Check current confidence before updating
+      const currentText = await db.medicalTextData.findUnique({
+        where: { id: input.id },
+        select: { confidence: true },
+      });
+
+      if (currentText?.confidence === 1) {
+        throw new Error("This text has already been annotated");
+      }
 
       const updatedMedicalText = await db.medicalTextData.update({
-        where: { id },
+        where: { id: input.id },
         data: {
-          annotatedText,
-          confidence,
-          annotateReason,
-          annotateTime,
-          userId,
+          annotatedText: input.annotatedText,
+          confidence: input.confidence,
+          annotateReason: input.annotateReason,
+          annotateTime: input.annotateTime,
+          userId: input.userId,
           updatedAt: new Date(),
         },
       });

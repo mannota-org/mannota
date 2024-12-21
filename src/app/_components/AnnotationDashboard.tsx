@@ -57,6 +57,11 @@ const AnnotationDashboard: React.FC = () => {
     },
   );
 
+  const checkConfidenceMutation = api.medicalText.checkTextConfidence.useQuery(
+    { id: data?.medicalText?.[0]?.id ?? "" },
+    { enabled: false },
+  );
+
   useEffect(() => {
     if (userError) {
       console.error("Failed to fetch user data:", userError);
@@ -131,6 +136,18 @@ const AnnotationDashboard: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      // Check confidence before submitting
+      const confidenceCheck = await checkConfidenceMutation.refetch();
+      if (confidenceCheck.data?.confidence === 1) {
+        toast({
+          title: "Already Annotated",
+          variant: "destructive",
+          description: "This text has already been annotated by someone else.",
+        });
+        await refetchMedicalText();
+        return;
+      }
+
       await updateMedicalTextMutation.mutateAsync({
         id: data.medicalText[0]?.id ?? "",
         annotatedText: editableText,
@@ -140,7 +157,6 @@ const AnnotationDashboard: React.FC = () => {
         userId: userData.id,
       });
 
-      // toast success
       toast({
         title: "Success",
         variant: "success",
@@ -150,10 +166,14 @@ const AnnotationDashboard: React.FC = () => {
       setAnnotateReason("");
     } catch (error) {
       console.error("Error updating medical text:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to annotate medical text. Please try again.";
       toast({
         title: "Error",
         variant: "destructive",
-        description: "Failed to annotate medical text. Please try again.",
+        description: errorMessage,
       });
     } finally {
       setIsSubmitting(false);
