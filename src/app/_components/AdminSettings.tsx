@@ -258,7 +258,7 @@ const AdminSettings = () => {
                     <Textarea
                       id="shortAnnotation"
                       value={shortGuideline}
-                      className="h-28 resize-none"
+                      className="h-28 resize-none text-gray-700"
                       onChange={(e) => setShortGuideline(e.target.value)}
                     />
                   </div>
@@ -267,7 +267,7 @@ const AdminSettings = () => {
                     <Textarea
                       id="longAnnotation"
                       value={longGuideline}
-                      className="h-60 resize-none"
+                      className="h-56 resize-none text-gray-700"
                       onChange={(e) => setLongGuideline(e.target.value)}
                     />
                   </div>
