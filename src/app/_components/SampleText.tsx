@@ -27,7 +27,7 @@ const SampleText: React.FC<SampleTextProps> = ({
         <Textarea
           value={medicalText ?? "N/A"}
           readOnly
-          className="resize-none bg-gray-50 text-gray-800"
+          className="h-20 bg-gray-50 text-gray-800"
           disabled
         />
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-1 lg:grid-cols-5">

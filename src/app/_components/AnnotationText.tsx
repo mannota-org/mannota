@@ -60,6 +60,7 @@ const AnnotationText: React.FC<AnnotationTextProps> = ({
           value={editableText || ""}
           onChange={(e) => setEditableText(e.target.value)}
           disabled={!isRunning || isPaused}
+          className="h-20"
         />
       </div>
       <div className="grid w-full items-center gap-1.5">

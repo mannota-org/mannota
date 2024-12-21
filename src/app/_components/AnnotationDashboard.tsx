@@ -227,7 +227,7 @@ const AnnotationDashboard: React.FC = () => {
     <div className="min-h-screen w-full overflow-hidden">
       <Header title="Annotation Dashboard" />
 
-      <div className="mb-12 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8 lg:px-52">
+      <div className="mb-16 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8 lg:px-52">
         <Card className="relative z-30 flex-1 pb-2 pt-8">
           <CardContent className="flex flex-col justify-between">
             <SampleText

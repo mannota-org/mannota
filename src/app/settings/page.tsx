@@ -49,7 +49,7 @@ const Settings = () => {
         </Dialog>
         {!showModal && (
           <div className="flex h-screen flex-col items-center justify-center">
-            <div className="text-center space-y-1">
+            <div className="space-y-1 text-center">
               <h2 className="text-2xl font-bold">Access Denied 🔒</h2>
               <p className="text-gray-600">
                 Please contact your admin for settings configuration.
