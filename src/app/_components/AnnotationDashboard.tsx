@@ -1,21 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
-import { ArrowRight, Clock, Loader2, Pause, Play, Send } from "lucide-react";
 import { api } from "@/trpc/react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import Header from "./Layout/Header";
-import Link from "next/link";
-import AnnotationGuideline from "./AnnotationGuideline";
-import { formatTime } from "@/lib/helpers";
+import SampleText from "./SampleText";
+import AnnotationText from "./AnnotationText";
+import { Button } from "@/components/ui/button";
 
 const AnnotationDashboard: React.FC = () => {
   const [editableText, setEditableText] = useState("");
@@ -27,7 +21,6 @@ const AnnotationDashboard: React.FC = () => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [updatePerformanceShown, setUpdatePerformanceShown] = useState(false);
   const [nextBatchShown, setNextBatchShown] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const { user } = useUser();
   const { toast } = useToast();
@@ -235,119 +228,35 @@ const AnnotationDashboard: React.FC = () => {
       <Header title="Annotation Dashboard" />
 
       <div className="mb-12 flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 md:px-8 lg:px-52">
-        <Card className="relative z-30 flex-1 pt-8">
+        <Card className="relative z-30 flex-1 pb-2 pt-8">
           <CardContent className="flex flex-col justify-between">
-            <div className="space-y-4">
-              <div className="grid w-full items-center gap-1.5">
-                <Label>Sample Text</Label>
-                <Textarea
-                  value={medicalText?.[0]?.originalText ?? "N/A"}
-                  readOnly
-                  className="resize-none bg-gray-50 text-gray-800"
-                  disabled
-                />
-                {!updatePerformanceShown && !nextBatchShown && (
-                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-1 lg:grid-cols-5">
-                    <Badge
-                      variant="outline"
-                      className="rounded-full border-orange-200 bg-yellow-50 text-sm text-orange-500"
-                    >
-                      Task: {medicalText?.[0]?.task ?? "N/A"}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="rounded-full border-red-200 bg-red-50 text-sm text-red-500"
-                    >
-                      CScore:{" "}
-                      {medicalText?.[0]?.confidence?.toFixed(1) ?? "N/A"}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="rounded-full border-purple-200 bg-purple-50 text-sm text-purple-600"
-                    >
-                      Batch: {batch?.index ?? "N/A"}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="rounded-full border-pink-200 bg-pink-50 text-sm text-pink-600"
-                    >
-                      Threshold:{" "}
-                      {settingsData?.data?.confidenceThreshold?.toFixed(1) ??
-                        "N/A"}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="rounded-full border-blue-200 bg-blue-50 text-sm text-blue-600"
-                    >
-                      DPB: {settingsData?.data?.dataPerBatch ?? "N/A"}
-                    </Badge>
-                  </div>
-                )}
-              </div>
-
-              <div className="grid w-full items-center gap-1.5">
-                <Label htmlFor="annotate-text">Annotate Text</Label>
-                <Textarea
-                  id="annotate-text"
-                  value={editableText || ""}
-                  onChange={(e) => setEditableText(e.target.value)}
-                  disabled={!isRunning || isPaused}
-                />
-              </div>
-              {!updatePerformanceShown && !nextBatchShown && (
-                <>
-                  <div className="grid w-full items-center gap-1.5">
-                    <Label htmlFor="annotate-reason">Annotate Reason</Label>
-                    <Input
-                      id="annotate-reason"
-                      value={annotateReason || ""}
-                      onChange={(e) => setAnnotateReason(e.target.value)}
-                      placeholder="Give your reason for annotating"
-                      disabled={!isRunning || isPaused || isSubmitting}
-                    />
-                  </div>
-                  <div className="flex grid grid-cols-1 flex-wrap gap-2 sm:grid-cols-1 lg:grid-cols-5">
-                    <Button
-                      onClick={handleStartPauseResume}
-                      disabled={isSubmitting}
-                      className="flex-1 bg-primary-800"
-                    >
-                      {!isRunning ? <Play /> : isPaused ? <Play /> : <Pause />}
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        stopTimer();
-                        void handleSubmit();
-                      }}
-                      disabled={!isRunning || isSubmitting}
-                      className="flex-1 bg-primary-800"
-                    >
-                      {isSubmitting && (
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      )}
-                      <Send />
-                    </Button>
-                    <Badge
-                      variant="outline"
-                      className="flex-1 border-green-600 bg-green-50 text-sm text-primary-800"
-                    >
-                      <Clock className="mr-2 h-4 w-4" />
-                      {formatTime(seconds)}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="border-default-200 bg-default-50 flex-1 text-sm font-normal text-gray-700"
-                    >
-                      <span className="font-bold">
-                        {textLeftToAnnotate ?? "N/A"}
-                      </span>
-                      /{totalTextInBatch ?? "N/A"} text(s) left
-                    </Badge>
-                  </div>
-                </>
-              )}
-            </div>
-
+            <SampleText
+              medicalText={medicalText?.[0]?.originalText ?? "N/A"}
+              task={medicalText?.[0]?.task ?? "N/A"}
+              confidence={medicalText?.[0]?.confidence ?? 0}
+              batchIndex={batch?.index ?? 0}
+              confidenceThreshold={settingsData?.data?.confidenceThreshold ?? 0}
+              dataPerBatch={settingsData?.data?.dataPerBatch ?? 0}
+            />
+            {!updatePerformanceShown && !nextBatchShown && (
+              <AnnotationText
+                editableText={editableText}
+                setEditableText={setEditableText}
+                annotateReason={annotateReason}
+                setAnnotateReason={setAnnotateReason}
+                isRunning={isRunning}
+                isPaused={isPaused}
+                isSubmitting={isSubmitting}
+                seconds={seconds}
+                textLeftToAnnotate={textLeftToAnnotate ?? 0}
+                totalTextInBatch={totalTextInBatch ?? 0}
+                handleStartPauseResume={handleStartPauseResume}
+                handleSubmit={() => {
+                  stopTimer();
+                  void handleSubmit();
+                }}
+              />
+            )}
             {updatePerformanceShown && (
               <Button onClick={handleUpdatePerformance}>
                 Update Batch Performance
@@ -359,9 +268,6 @@ const AnnotationDashboard: React.FC = () => {
               </Button>
             )}
           </CardContent>
-          <CardFooter className="p-0">
-            <AnnotationGuideline />
-          </CardFooter>
         </Card>
       </div>
     </div>

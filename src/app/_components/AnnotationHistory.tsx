@@ -95,7 +95,7 @@ const AnnotationHistory: React.FC = () => {
                     open={openDialog === entry.id}
                     onOpenChange={() => setOpenDialog(null)}
                   >
-                    <DialogContent>
+                    <DialogContent className="max-h-[80vh] overflow-y-auto">
                       <DialogHeader>
                         <DialogTitle className="pl-2">
                           Annotation Details
