@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,7 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 export const OnboardingDialog = () => {
   const [role, setRole] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const router = useRouter(); 
+  const router = useRouter();
 
   const { user } = useUser();
   const email = user?.primaryEmailAddress?.emailAddress ?? "";
@@ -39,10 +39,10 @@ export const OnboardingDialog = () => {
         setIsOpen(true);
       } else {
         console.log("User already exists, not displaying dialog.");
-        router.push("/dashboard"); 
+        window.location.href = "/dashboard";
       }
     }
-  }, [isSuccess, userExists, router]);
+  }, [isSuccess, userExists]);
 
   const checkAndCreateUserMutation = api.user.checkAndCreateUser.useMutation({
     onSuccess: (data) => {
@@ -50,10 +50,11 @@ export const OnboardingDialog = () => {
         setIsOpen(false);
         toast({
           title: "Success",
+          variant: "success",
           description: "User created successfully",
         });
         console.log("User created:", data);
-        router.push("/dashboard"); // Redirect after successful onboarding
+        window.location.href = "/dashboard";
       }
     },
     onError: (error: unknown) => {
@@ -85,7 +86,11 @@ export const OnboardingDialog = () => {
 
   return isOpen ? (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent
+        className="sm:max-w-[425px]"
+        onEscapeKeyDown={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>Welcome!</DialogTitle>
           <DialogDescription>
