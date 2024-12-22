@@ -108,7 +108,6 @@ export const medicalTextRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input }) => {
-      // Check current confidence before updating
       const currentText = await db.medicalTextData.findUnique({
         where: { id: input.id },
         select: { confidence: true },
@@ -209,6 +208,30 @@ export const medicalTextRouter = createTRPCRouter({
         totalCount,
       };
     }),
+
+  deleteAnnotations: publicProcedure.mutation(async () => {
+    const textsToUpdate = await db.medicalTextData.findMany({
+      where: {
+        NOT: {
+          annotatedText: "",
+        },
+      },
+      take: 50,
+    });
+
+    const updates = textsToUpdate.map((text) =>
+      db.medicalTextData.update({
+        where: { id: text.id },
+        data: {
+          annotatedText: "",
+          confidence: 0.1,
+        },
+      }),
+    );
+
+    await Promise.all(updates);
+    return { count: updates.length };
+  }),
 });
 
 export default medicalTextRouter;

@@ -214,9 +214,9 @@ const AnnotationDashboard: React.FC = () => {
       await refetchMedicalText();
       if (!data?.medicalText?.length) {
         toast({
-          title: "Annotation Completed",
+          title: "Batch Annotation Completed",
           variant: "success",
-          description: "All batches have been completed.",
+          // description: "All batches have been completed.",
         });
       }
       setNextBatchShown(false);
@@ -278,12 +278,12 @@ const AnnotationDashboard: React.FC = () => {
               />
             )}
             {updatePerformanceShown && (
-              <Button onClick={handleUpdatePerformance}>
+              <Button onClick={handleUpdatePerformance} className="mt-4">
                 Update Batch Performance
               </Button>
             )}
             {nextBatchShown && (
-              <Button onClick={handleFetchNextBatch}>
+              <Button onClick={handleFetchNextBatch} className="mt-4">
                 Annotate Next Batch
               </Button>
             )}
