@@ -15,7 +15,7 @@ const AddText = () => {
 
   const addMedicalTextMutation = api.medicalText.addMedicalText.useMutation({
     onSuccess: (data) => {
-      setMedicalTextInput(""); 
+      setMedicalTextInput("");
       toast({
         title: "Success",
         description: "Medical text added successfully.",
@@ -94,9 +94,9 @@ const AddText = () => {
               annotateReason: "Sample reason",
               annotateTime: 120,
               userId:
-                "6747497d616992da7c23bbe7 OR 6743e69ef8b056be93eaf750 OR 6743e331f8b056be93eaf74e OR 6743e1edf8b056be93eaf74d",
+                "6743e1edf8b056be93eaf74d OR 6743e331f8b056be93eaf74e OR 674990164731915987b05ba6 OR 6751ccfe3c8d7e1c32f2e2ea OR 6755934b30abc228bc3b71d7 OR 67508881ca0559fba3bc9a30",
               batchId:
-                "6746de9a334cf53948e7f9b5 OR 6746dea2334cf53948e7f9b6 OR 6746deaf334cf53948e7f9b7",
+                "675aed1a8a6fa24d2bad9787 OR 675aed1c8a6fa24d2bad9788 OR 675aed1e8a6fa24d2bad9789",
             },
             null,
             2,
