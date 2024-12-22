@@ -41,19 +41,19 @@ const SampleText: React.FC<SampleTextProps> = ({
             variant="outline"
             className="rounded-full border-red-200 bg-red-50 text-sm text-red-500"
           >
-            CScore: {confidence?.toFixed(1) ?? "N/A"}
+            Batch: {batchIndex ?? "N/A"}
           </Badge>
           <Badge
             variant="outline"
             className="rounded-full border-purple-200 bg-purple-50 text-sm text-purple-600"
           >
-            Batch: {batchIndex ?? "N/A"}
+            Batch CS: {confidence?.toFixed(1) ?? "N/A"}
           </Badge>
           <Badge
             variant="outline"
             className="rounded-full border-pink-200 bg-pink-50 text-sm text-pink-600"
           >
-            Threshold: {confidenceThreshold?.toFixed(1) ?? "N/A"}
+            CS Threshold: {confidenceThreshold?.toFixed(1) ?? "N/A"}
           </Badge>
           <Badge
             variant="outline"

@@ -253,7 +253,7 @@ const AnnotationDashboard: React.FC = () => {
             <SampleText
               medicalText={medicalText?.[0]?.originalText ?? "N/A"}
               task={medicalText?.[0]?.task ?? "N/A"}
-              confidence={medicalText?.[0]?.confidence ?? 0}
+              confidence={batch?.confidence ?? 0}
               batchIndex={batch?.index ?? 0}
               confidenceThreshold={settingsData?.data?.confidenceThreshold ?? 0}
               dataPerBatch={settingsData?.data?.dataPerBatch ?? 0}
