@@ -108,7 +108,6 @@ export const medicalTextRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ input }) => {
-      // Check current confidence before updating
       const currentText = await db.medicalTextData.findUnique({
         where: { id: input.id },
         select: { confidence: true },

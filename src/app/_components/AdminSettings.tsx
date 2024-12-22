@@ -52,17 +52,22 @@ const AdminSettings = () => {
   }, [guidelines]);
 
   const handleDataPerBatchSubmit = async () => {
-    if (!settings?.id) return;
+    if (!settings?.id) {
+      console.error("Settings ID not found");
+      return;
+    }
 
     setIsLoading(true);
 
     try {
+      console.log("Updating settings with batch size:", dataPerBatch);
       await updateSettings.mutateAsync({
         id: settings.id,
         dataPerBatch: Number(dataPerBatch),
         confidenceThreshold: settings.confidenceThreshold,
       });
 
+      console.log("Settings updated, reassessing batches...");
       await reassessBatches.mutateAsync({
         newBatchSize: Number(dataPerBatch),
       });
@@ -73,10 +78,14 @@ const AdminSettings = () => {
         description: "Data per batch updated successfully",
       });
     } catch (error) {
+      console.error("Data per batch update error:", error);
       toast({
         title: "Error",
         variant: "destructive",
-        description: "Failed to update data per batch. Please try again.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to update data per batch. Please try again.",
       });
     } finally {
       setIsLoading(false);
@@ -153,18 +162,18 @@ const AdminSettings = () => {
   };
 
   return (
-    <div className="flex h-[100dvh] w-full flex-col overflow-hidden">
+    <div className="flex min-h-[100dvh] w-full flex-col overflow-hidden">
       <Header title="Admin Settings" />
-      <div className="px-56">
+      <div className="px-4 sm:px-8 md:px-16 lg:px-32 xl:px-56">
         <Tabs defaultValue="batch" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3">
             <TabsTrigger value="batch">Data per Batch</TabsTrigger>
             <TabsTrigger value="confidence">Confidence Threshold</TabsTrigger>
             <TabsTrigger value="guideline">Annotation Guideline</TabsTrigger>
           </TabsList>
 
           <TabsContent value="batch">
-            <Card>
+            <Card className="mt-4">
               <CardHeader>
                 <CardTitle>Data Per Batch</CardTitle>
                 <CardDescription>
@@ -183,7 +192,7 @@ const AdminSettings = () => {
                   </div>
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4 p-4 sm:p-6">
                 <div className="space-y-1">
                   <Label htmlFor="batchSize">Batch Size</Label>
                   <Input
@@ -191,10 +200,11 @@ const AdminSettings = () => {
                     type="number"
                     value={dataPerBatch}
                     onChange={(e) => setDataPerBatch(e.target.value)}
+                    className="max-w-md"
                   />
                 </div>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="flex justify-end p-4 sm:p-6">
                 <Button onClick={handleDataPerBatchSubmit} disabled={isLoading}>
                   {isLoading ? <LoadingSpinner /> : "Save Changes"}
                 </Button>
@@ -203,7 +213,7 @@ const AdminSettings = () => {
           </TabsContent>
 
           <TabsContent value="confidence">
-            <Card>
+            <Card className="mt-4">
               <CardHeader>
                 <CardTitle>Confidence Threshold</CardTitle>
                 <CardDescription>
@@ -211,13 +221,13 @@ const AdminSettings = () => {
                   used to fetch low confidence batches for annotations.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4 p-4 sm:p-6">
                 <div className="space-y-1">
                   <Slider
                     value={[confidenceThreshold]}
                     max={100}
                     step={10}
-                    className={cn("w-[60%]")}
+                    className="w-full max-w-md"
                     onValueChange={(value) => {
                       if (value[0] !== undefined) {
                         setConfidenceThreshold(value[0]);
@@ -234,7 +244,7 @@ const AdminSettings = () => {
                   </div>
                 </div>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="flex justify-end p-4 sm:p-6">
                 <Button onClick={handleConfidenceSubmit} disabled={isLoading}>
                   {isLoading ? <LoadingSpinner /> : "Save Changes"}
                 </Button>
@@ -244,21 +254,21 @@ const AdminSettings = () => {
 
           <TabsContent value="guideline">
             <Card>
-              <CardHeader>
+              <CardHeader className="mb-0 pb-2">
                 <CardTitle>Annotation Guideline</CardTitle>
                 <CardDescription>
                   Provide detailed short and long annotation guidelines for
                   annotators.
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
+              <CardContent className="pb-0">
+                <div className="space-y-4">
                   <div>
                     <Label htmlFor="shortAnnotation">Short Annotation</Label>
                     <Textarea
                       id="shortAnnotation"
                       value={shortGuideline}
-                      className="h-28 resize-none text-gray-700"
+                      className="mt-1 h-28 resize-none text-gray-700"
                       onChange={(e) => setShortGuideline(e.target.value)}
                     />
                   </div>
@@ -267,13 +277,13 @@ const AdminSettings = () => {
                     <Textarea
                       id="longAnnotation"
                       value={longGuideline}
-                      className="h-56 resize-none text-gray-700"
+                      className="mt-1 h-28 resize-none text-gray-700 sm:h-56"
                       onChange={(e) => setLongGuideline(e.target.value)}
                     />
                   </div>
                 </div>
               </CardContent>
-              <CardFooter>
+              <CardFooter className="flex justify-end p-4 sm:p-6">
                 <Button onClick={handleGuidelineSubmit} disabled={isLoading}>
                   {isLoading ? <LoadingSpinner /> : "Save Changes"}
                 </Button>
