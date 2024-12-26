@@ -267,6 +267,8 @@ const AdminSettings = () => {
                     <Label htmlFor="shortAnnotation">Short Annotation</Label>
                     <Textarea
                       id="shortAnnotation"
+                      role="textbox"
+                      aria-label="Short Annotation"
                       value={shortGuideline}
                       className="mt-1 h-28 resize-none text-gray-700"
                       onChange={(e) => setShortGuideline(e.target.value)}
@@ -276,6 +278,8 @@ const AdminSettings = () => {
                     <Label htmlFor="longAnnotation">Long Annotation</Label>
                     <Textarea
                       id="longAnnotation"
+                      role="textbox"
+                      aria-label="Long Annotation"
                       value={longGuideline}
                       className="mt-1 h-28 resize-none text-gray-700 sm:h-56"
                       onChange={(e) => setLongGuideline(e.target.value)}
